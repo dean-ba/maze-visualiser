@@ -1,6 +1,7 @@
 import pygame
 import sys
 from ui.button import Button
+from generator.backtracker import BacktrackerGenerator
 
 pygame.init()
 
@@ -14,6 +15,12 @@ GRAPH_PANEL_COLOUR = (50, 50, 50)
 SETTINGS_PANEL_COLOUR = (40, 80, 160)
 WHITE = (255, 255, 255)
 
+generation_algorithm = None
+solving_algorithm = None
+generator = None
+generating = False
+graph = None
+
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Graph Algorithms Visualiser")
 
@@ -21,12 +28,21 @@ font = pygame.font.SysFont("arial", 18)
 clock = pygame.time.Clock()
 
 def select_backtracker():
+    global generation_algorithm
+    generation_algorithm = "Backtracker"
     print("backtracker")
 
 def select_astar():
+    global solving_algorithm
+    solving_algorithm = "A*"
     print("astar")
 
 def generate():
+    global generator, generating
+
+    if generation_algorithm == "Backtracker":
+        generator = BacktrackerGenerator(21, 21)
+        generating = True
     print("generate")
 
 def solve():
@@ -52,12 +68,43 @@ def draw_settings_panel():
 
 def draw_graph_panel():
     pygame.draw.rect(screen, GRAPH_PANEL_COLOUR, (SETTINGS_PANEL_WIDTH, 0, GRAPH_PANEL_WIDTH, WINDOW_HEIGHT))
+    cell_size = 20
+    
+    if graph is None:
+        return
+    
+    rows = len(graph)
+    cols = len(graph[0])
+    margin = 0
+
+    for row in range(rows):
+        for col in range(cols):
+            value = graph[row][col]
+            if value == 1:       # wall
+                color = (0, 0, 0)
+            elif value == 0:     # path
+                color = (255, 255, 255)
+            elif value == 2:     # current cell (optional)
+                color = (255, 0, 0)
+            rect = pygame.Rect(
+                SETTINGS_PANEL_WIDTH + col*cell_size + margin,
+                row*cell_size + margin,
+                cell_size - 2*margin,
+                cell_size - 2*margin
+            )
+            pygame.draw.rect(screen, color, rect)
 
 def main():
+    global generation_algorithm, solving_algorithm, generator, generating, graph
+    generation_algorithm = None
+    solving_algorithm = None
+    generator = None
+    generating = False
+    graph = None
     running = True
 
     while running:
-        clock.tick(60)
+        clock.tick(20)
         screen.fill(BACKGROUND_COLOUR)
 
         for event in pygame.event.get():
@@ -67,6 +114,14 @@ def main():
             for button in buttons:
                 button.handle_event(event)
 
+        if generating and generator:
+            done = generator.step()
+            graph = generator.grid
+
+            if done:
+                generating = False
+                generator = None
+        
         draw_settings_panel()
         draw_graph_panel()
 
