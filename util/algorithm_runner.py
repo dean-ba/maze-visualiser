@@ -9,6 +9,8 @@ class AlgorithmRunner:
         self.generating = False
         self.solving = False
         self.graph = None
+        self.config = None
+        self.cell_size = 0
 
     def handle_tick(self):
         if self.generating and self.generator:
@@ -38,13 +40,20 @@ class AlgorithmRunner:
         return self.graph
     
     def set_backtracker(self):
-        self.generator = BacktrackerGenerator(11, 11)
+        self.solving = False
+        if not self.generating:
+            self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
+            self.cell_size = self.config.cell_size
 
     def start_gen(self):
-        self.generating = True
+        if self.generator:
+            self.generating = True
 
     def set_astar(self):
-        self.solver = Astar(self.graph)
+        self.solving = False
+        if not self.generating:
+            self.solver = Astar(self.graph)
 
     def start_solve(self):
-        self.solving = True
+        if not self.generating:
+            self.solving = True
