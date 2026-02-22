@@ -2,6 +2,10 @@ import pygame
 from util.node_type import NodeType
 
 class Drawer:
+    """
+    Class to draw the settings panel and graph to the screen with provided values.
+    """
+    
     def __init__(self, screen, config, runner):
         self.screen = screen
         self.config = config
@@ -10,16 +14,16 @@ class Drawer:
     def draw_settings_panel(self):
         pygame.draw.rect(self.screen, self.config.SETTINGS_PANEL_COLOUR, (0, 0, self.config.SETTINGS_PANEL_WIDTH, self.config.WINDOW_HEIGHT))
 
-        self.screen.blit(self.config.font.render("Generation Algorithm",     True, self.config.WHITE), (10, 20))
-        self.screen.blit(self.config.font.render("Solving Algorithm",        True, self.config.WHITE), (10, 100))
-        self.screen.blit(self.config.font.render(f"Width: {self.config.graph_width}",    True, self.config.WHITE), (10, 750))
-        self.screen.blit(self.config.font.render(f"Height: {self.config.graph_height}",  True, self.config.WHITE), (10, 770))
+        for label in self.config.labels:
+            self.screen.blit(self.config.font.render(label[0], True, self.config.WHITE), label[1])
 
         for button in self.config.buttons:
             button.draw(self.screen)
 
 
     def draw_graph_panel(self, graph):
+        """Draws the graph centered on the graph panel."""
+
         pygame.draw.rect(self.screen, self.config.GRAPH_PANEL_COLOUR, (self.config.SETTINGS_PANEL_WIDTH, 0, self.config.GRAPH_PANEL_WIDTH, self.config.WINDOW_HEIGHT))
         
         if graph is None:

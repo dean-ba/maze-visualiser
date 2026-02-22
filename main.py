@@ -9,9 +9,7 @@ pygame.display.set_caption("Graph Algorithms Visualiser")
 
 runner = AlgorithmRunner()
 config = ConfigManager(
-    runner.set_backtracker, 
     runner.start_gen, 
-    runner.set_astar, 
     runner.start_solve
     )
 runner.config = config

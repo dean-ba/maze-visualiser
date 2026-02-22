@@ -1,8 +1,14 @@
 from generator.backtracker import BacktrackerGenerator
 from solver.astar import Astar
 from util.node_type import NodeType
+from util.gen_type import GenType
+from util.solve_type import SolveType
 
 class AlgorithmRunner:
+    """
+    Class to run both generation and solving algorithms for graphs.
+    """
+
     def __init__(self):
         self.generator = None
         self.solver = None
@@ -13,6 +19,7 @@ class AlgorithmRunner:
         self.cell_size = 0
 
     def handle_tick(self):
+        """Carries out a single step of the currently running algorithm."""
         if self.generating and self.generator:
             done = self.generator.step()
             if done:
@@ -38,22 +45,32 @@ class AlgorithmRunner:
         elif self.solver:
             return self.solver.graph
         return self.graph
-    
-    def set_backtracker(self):
-        self.solving = False
-        if not self.generating:
-            self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
-            self.cell_size = self.config.cell_size
 
     def start_gen(self):
-        if self.generator:
+        """Initialises the generation algorithm to be used."""
+
+        if not self.generating and not self.solving:
+            match self.config.gen_algorithm:
+                case GenType.BACKTRACKER:
+                    self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
+                case GenType.PRIM:
+                    print("Prims")
+                    self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
+                case _:
+                    return
+            self.cell_size = self.config.cell_size
             self.generating = True
 
-    def set_astar(self):
-        self.solving = False
-        if not self.generating:
-            self.solver = Astar(self.graph)
-
     def start_solve(self):
-        if not self.generating:
+        """Initialises the solving algorithm to be used."""
+
+        if not self.generating and not self.solving:
+            match self.config.solve_algorithm:
+                case SolveType.ASTAR:
+                    self.solver = Astar(self.graph)
+                case SolveType.DIJKSTRA:
+                    print("Change to Dijsktra")
+                    self.solver = Astar(self.graph)
+                case _:
+                    return
             self.solving = True
