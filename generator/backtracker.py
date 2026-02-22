@@ -1,4 +1,5 @@
 import random
+from util.node_type import NodeType
 
 class BacktrackerGenerator:
     """
@@ -15,7 +16,7 @@ class BacktrackerGenerator:
 
         self.rows = rows
         self.cols = cols
-        self.grid = [[1 for _ in range(cols)] for _ in range(rows)]
+        self.grid = [[NodeType.WALL for _ in range(cols)] for _ in range(rows)]
 
         start_row = random.randrange(1, rows, 2)
         start_col = random.randrange(1, cols, 2)
@@ -29,17 +30,17 @@ class BacktrackerGenerator:
         Gets all cells adjacent to the current cell that have not been visited.
         Cells are marked visited when they are changed to paths.
         """
-        
+
         row, col = cell
         neighbors = []
 
-        if row > 1 and self.grid[row - 2][col] == 1:
+        if row > 1 and self.grid[row - 2][col] == NodeType.WALL:
             neighbors.append((row - 2, col))
-        if row < self.rows - 2 and self.grid[row + 2][col] == 1:
+        if row < self.rows - 2 and self.grid[row + 2][col] == NodeType.WALL:
             neighbors.append((row + 2, col))
-        if col > 1 and self.grid[row][col - 2] == 1:
+        if col > 1 and self.grid[row][col - 2] == NodeType.WALL:
             neighbors.append((row, col - 2))
-        if col < self.cols - 2 and self.grid[row][col + 2] == 1:
+        if col < self.cols - 2 and self.grid[row][col + 2] == NodeType.WALL:
             neighbors.append((row, col + 2))
 
         return neighbors
@@ -63,19 +64,19 @@ class BacktrackerGenerator:
 
             row_wall = (current_cell[0] + next_cell[0]) // 2
             col_wall = (current_cell[1] + next_cell[1]) // 2
-            self.grid[row_wall][col_wall] = 0
-            self.grid[next_cell[0]][next_cell[1]] = 2
+            self.grid[row_wall][col_wall] = NodeType.EMPTY
+            self.grid[next_cell[0]][next_cell[1]] = NodeType.PATH
 
             self.stack.append(next_cell)
 
         for row in range(self.rows):
             for col in range(self.cols):
-                if self.grid[row][col] == 2:
-                    self.grid[row][col] = 0
+                if self.grid[row][col] == NodeType.PATH:
+                    self.grid[row][col] = NodeType.EMPTY
 
         if self.stack:
             row, col = self.stack[-1]
-            self.grid[row][col] = 2
+            self.grid[row][col] = NodeType.PATH
 
         return False
     

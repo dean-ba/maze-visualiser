@@ -1,3 +1,5 @@
+from util.node_type import NodeType
+
 class Node:
     """
     Helper class for storing graph node information.
@@ -36,13 +38,13 @@ class Astar:
         row, col = cell
         neighbors = []
 
-        if row > 1 and self.graph[row - 1][col] != 1:
+        if row > 1 and self.graph[row - 1][col] != NodeType.WALL:
             neighbors.append((row - 1, col))
-        if row < self.rows - 1 and self.graph[row + 1][col] != 1:
+        if row < self.rows - 1 and self.graph[row + 1][col] != NodeType.WALL:
             neighbors.append((row + 1, col))
-        if col > 1 and self.graph[row][col - 1] != 1:
+        if col > 1 and self.graph[row][col - 1] != NodeType.WALL:
             neighbors.append((row, col - 1))
-        if col < self.cols - 1 and self.graph[row][col + 1] != 1:
+        if col < self.cols - 1 and self.graph[row][col + 1] != NodeType.WALL:
             neighbors.append((row, col + 1))
 
         return neighbors
@@ -59,7 +61,7 @@ class Astar:
 
         current = min(self.open, key=lambda x: x.f_cost)
         self.open.remove(current)
-        self.graph[current.pos[0]][current.pos[1]] = 3
+        self.graph[current.pos[0]][current.pos[1]] = NodeType.VISITED
 
         neighbours = self.get_neighbors(current.pos)
 

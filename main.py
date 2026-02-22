@@ -1,6 +1,7 @@
 import pygame
 import sys
-from ui.button import Button
+from util.button import Button
+from util.node_type import NodeType
 from generator.backtracker import BacktrackerGenerator
 from solver.astar import Astar
 
@@ -87,15 +88,18 @@ def draw_graph_panel():
 
     for row in range(rows):
         for col in range(cols):
-            value = graph[row][col]
-            if value == 1:       # wall
-                colour = (0, 0, 0)
-            elif value == 0:     # path
-                colour = (255, 255, 255)
-            elif value == 2:     # current cell
-                colour = (255, 0, 0)
-            elif value == 3:     # search cell
-                colour = (50, 50, 50)
+            match graph[row][col]:
+                case NodeType.WALL:
+                    colour = (0, 0, 0)
+                case NodeType.EMPTY:
+                    colour = (255, 255, 255)
+                case NodeType.PATH:
+                    colour = (255, 0, 0)
+                case NodeType.VISITED:
+                    colour = (50, 50, 50)
+                case _:
+                    colour = (255, 255, 255)
+                    
             rect = pygame.Rect(
                 SETTINGS_PANEL_WIDTH + col * cell_size + margin,
                 row * cell_size + margin,
@@ -143,7 +147,7 @@ def main():
                 solving = False
 
         if solver and solver.path_node != None:
-            graph[solver.path_node.pos[0]][solver.path_node.pos[1]] = 2
+            graph[solver.path_node.pos[0]][solver.path_node.pos[1]] = NodeType.PATH
             solver.path_node = solver.path_node.parent
             if not solver.path_node:
                 solver = None
