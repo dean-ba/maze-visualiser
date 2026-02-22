@@ -29,6 +29,7 @@ class BacktrackerGenerator:
         Gets all cells adjacent to the current cell that have not been visited.
         Cells are marked visited when they are changed to paths.
         """
+        
         row, col = cell
         neighbors = []
 

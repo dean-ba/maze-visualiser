@@ -2,6 +2,7 @@ import pygame
 import sys
 from ui.button import Button
 from generator.backtracker import BacktrackerGenerator
+from solver.astar import Astar
 
 pygame.init()
 
@@ -19,6 +20,8 @@ generation_algorithm = None
 solving_algorithm = None
 generator = None
 generating = False
+solver = None
+solving = False
 graph = None
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -41,11 +44,16 @@ def generate():
     global generator, generating
 
     if generation_algorithm == "Backtracker":
-        generator = BacktrackerGenerator(21, 21)
+        generator = BacktrackerGenerator(11, 11)
         generating = True
     print("generate")
 
 def solve():
+    global solver, solving
+
+    if solving_algorithm == "A*":
+        solver = Astar(graph)
+        solving = True
     print("solve")
 
 buttons = [
@@ -68,7 +76,7 @@ def draw_settings_panel():
 
 def draw_graph_panel():
     pygame.draw.rect(screen, GRAPH_PANEL_COLOUR, (SETTINGS_PANEL_WIDTH, 0, GRAPH_PANEL_WIDTH, WINDOW_HEIGHT))
-    cell_size = 20
+    cell_size = 30
     
     if graph is None:
         return
@@ -81,25 +89,29 @@ def draw_graph_panel():
         for col in range(cols):
             value = graph[row][col]
             if value == 1:       # wall
-                color = (0, 0, 0)
+                colour = (0, 0, 0)
             elif value == 0:     # path
-                color = (255, 255, 255)
-            elif value == 2:     # current cell (optional)
-                color = (255, 0, 0)
+                colour = (255, 255, 255)
+            elif value == 2:     # current cell
+                colour = (255, 0, 0)
+            elif value == 3:     # search cell
+                colour = (50, 50, 50)
             rect = pygame.Rect(
-                SETTINGS_PANEL_WIDTH + col*cell_size + margin,
-                row*cell_size + margin,
-                cell_size - 2*margin,
-                cell_size - 2*margin
+                SETTINGS_PANEL_WIDTH + col * cell_size + margin,
+                row * cell_size + margin,
+                cell_size - 2 * margin,
+                cell_size - 2 * margin
             )
-            pygame.draw.rect(screen, color, rect)
+            pygame.draw.rect(screen, colour, rect)
 
 def main():
-    global generation_algorithm, solving_algorithm, generator, generating, graph
+    global generation_algorithm, solving_algorithm, generator, generating, solver, solving, graph
     generation_algorithm = None
     solving_algorithm = None
     generator = None
     generating = False
+    solver = None
+    solving = False
     graph = None
     running = True
 
@@ -122,6 +134,21 @@ def main():
                 generating = False
                 generator = None
         
+        if solving and solver and not generating:
+            solvable = solver.step()
+            graph = solver.graph
+            solved = solver.solved
+
+            if solved or not solvable:
+                solving = False
+
+        if solver and solver.path_node != None:
+            graph[solver.path_node.pos[0]][solver.path_node.pos[1]] = 2
+            solver.path_node = solver.path_node.parent
+            if not solver.path_node:
+                solver = None
+                
+
         draw_settings_panel()
         draw_graph_panel()
 
