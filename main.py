@@ -11,10 +11,12 @@ WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 800
 SETTINGS_PANEL_WIDTH = 200
 GRAPH_PANEL_WIDTH = WINDOW_WIDTH - SETTINGS_PANEL_WIDTH
+GRAPH_INFO_PANEL_HEIGHT = 200
+GRAPH_PANEL_HEIGHT = WINDOW_HEIGHT - GRAPH_INFO_PANEL_HEIGHT
 
 BACKGROUND_COLOUR = (255, 255, 255)
 GRAPH_PANEL_COLOUR = (50, 50, 50)
-SETTINGS_PANEL_COLOUR = (40, 80, 160)
+SETTINGS_PANEL_COLOUR = (40, 40, 40)
 WHITE = (255, 255, 255)
 
 generation_algorithm = None
@@ -24,6 +26,9 @@ generating = False
 solver = None
 solving = False
 graph = None
+graph_width = 3
+graph_height = 3
+cell_size = 0
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Graph Algorithms Visualiser")
@@ -42,10 +47,11 @@ def select_astar():
     print("astar")
 
 def generate():
-    global generator, generating
+    global generator, generating, cell_size
 
     if generation_algorithm == "Backtracker":
-        generator = BacktrackerGenerator(11, 11)
+        generator = BacktrackerGenerator(graph_height, graph_width)
+        cell_size = min(GRAPH_PANEL_WIDTH // (graph_width), GRAPH_PANEL_HEIGHT // (graph_height))
         generating = True
     print("generate")
 
@@ -67,24 +73,42 @@ buttons = [
 def draw_settings_panel():
     pygame.draw.rect(screen, SETTINGS_PANEL_COLOUR, (0, 0, SETTINGS_PANEL_WIDTH, WINDOW_HEIGHT))
 
-    screen.blit(font.render("Generation Algorithm", True, WHITE), (10, 20))
-    screen.blit(font.render("Solving Algorithm",    True, WHITE), (10, 100))
-    screen.blit(font.render("Width:",               True, WHITE), (10, 580))
-    screen.blit(font.render("Height:",              True, WHITE), (10, 510))
+    screen.blit(font.render("Generation Algorithm",     True, WHITE), (10, 20))
+    screen.blit(font.render("Solving Algorithm",        True, WHITE), (10, 100))
+    screen.blit(font.render(f"Width: {graph_width}",    True, WHITE), (10, 580))
+    screen.blit(font.render(f"Height: {graph_height}",  True, WHITE), (10, 510))
 
     for button in buttons:
         button.draw(screen)
 
+def handle_change_graph_size(event):
+    global graph_height, graph_width
+
+    match event.key:
+        case pygame.K_DOWN:
+            graph_height -= 2 if graph_height > 3 else 0
+        case pygame.K_UP:
+            graph_height += 2
+        case pygame.K_LEFT:
+            graph_width -= 2 if graph_width > 3 else 0
+        case pygame.K_RIGHT:
+            graph_width += 2
+        case _:
+            return
+
+
 def draw_graph_panel():
-    pygame.draw.rect(screen, GRAPH_PANEL_COLOUR, (SETTINGS_PANEL_WIDTH, 0, GRAPH_PANEL_WIDTH, WINDOW_HEIGHT))
-    cell_size = 30
+    global cell_size
+    pygame.draw.rect(screen, GRAPH_PANEL_COLOUR, (SETTINGS_PANEL_WIDTH, 0, GRAPH_PANEL_WIDTH, GRAPH_PANEL_HEIGHT))
     
     if graph is None:
         return
     
     rows = len(graph)
     cols = len(graph[0])
-    margin = 0
+
+    left = ((WINDOW_WIDTH + SETTINGS_PANEL_WIDTH) / 2 - cols * cell_size / 2)
+    top = (GRAPH_PANEL_HEIGHT / 2 - rows * cell_size / 2)
 
     for row in range(rows):
         for col in range(cols):
@@ -99,12 +123,12 @@ def draw_graph_panel():
                     colour = (50, 50, 50)
                 case _:
                     colour = (255, 255, 255)
-                    
+
             rect = pygame.Rect(
-                SETTINGS_PANEL_WIDTH + col * cell_size + margin,
-                row * cell_size + margin,
-                cell_size - 2 * margin,
-                cell_size - 2 * margin
+                left + col * cell_size,
+                top + row * cell_size,
+                cell_size,
+                cell_size
             )
             pygame.draw.rect(screen, colour, rect)
 
@@ -126,6 +150,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            
+            if event.type == pygame.KEYDOWN:
+                handle_change_graph_size(event)
             
             for button in buttons:
                 button.handle_event(event)
