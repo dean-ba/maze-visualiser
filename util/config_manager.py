@@ -9,20 +9,25 @@ class ConfigManager:
     def __init__(self, start_gen, start_solve):
         self.WINDOW_WIDTH = 1000
         self.WINDOW_HEIGHT = 800
-        self.SETTINGS_PANEL_WIDTH = 200
-        self.GRAPH_PANEL_WIDTH = self.WINDOW_WIDTH - self.SETTINGS_PANEL_WIDTH
+        self.ALGORITHM_PANEL_WIDTH = 200
+        self.ALGORITHM_PANEL_HEIGHT = self.WINDOW_HEIGHT
+        self.ENVIRONMENT_PANEL_WIDTH = self.WINDOW_WIDTH - self.ALGORITHM_PANEL_WIDTH
+        self.ENVIRONMENT_PANEL_HEIGHT = 200
+        self.GRAPH_PANEL_WIDTH = self.ENVIRONMENT_PANEL_WIDTH
+        self.GRAPH_PANEL_HEIGHT = self.WINDOW_HEIGHT - self.ENVIRONMENT_PANEL_HEIGHT
         self.BACKGROUND_COLOUR = (255, 255, 255)
         self.GRAPH_PANEL_COLOUR = (50, 50, 50)
-        self.SETTINGS_PANEL_COLOUR = (40, 40, 40)
+        self.ALGORITHM_PANEL_COLOUR = (40, 40, 40)
+        self.ENVIRONMENT_PANEL_COLOUR = (40, 40, 40)
         self.WHITE = (255, 255, 255)
         self.gen_algorithm = GenType.BACKTRACKER
         self.solve_algorithm = SolveType.ASTAR
 
-        self.tick_rate = 30
+        self.tick_rate = 10
         self.font = pygame.font.SysFont("arial", 18)
         self.graph_width = 21
         self.graph_height = 21
-        self.cell_size = min(self.GRAPH_PANEL_WIDTH // (self.graph_width + 2), self.WINDOW_HEIGHT // (self.graph_height + 2))
+        self.cell_size = min(self.GRAPH_PANEL_WIDTH // (self.graph_width + 2), self.GRAPH_PANEL_HEIGHT // (self.graph_height + 2))
 
         self.buttons = [
             Button((10, 50, 150, 40), "Backtracker", self.set_backtracker, self.font, self.WHITE),
@@ -43,7 +48,7 @@ class ConfigManager:
         self.labels = [
             ("Generation Algorithm", (10, 20)),
             ("Solving Algorithm", (10, 350)),
-            (f"Width: {self.graph_width}", (10, 750)), #doesnt change dynamically
+            (f"Width: {self.graph_width}", (10, 750)),
             (f"Height: {self.graph_height}", (10, 770)),
         ]
     
@@ -63,7 +68,7 @@ class ConfigManager:
                 self.labels[2] = (f"Width: {self.graph_width}", (10, 750))
             case _:
                 return
-        self.cell_size = min(self.GRAPH_PANEL_WIDTH // (self.graph_width + 2), self.WINDOW_HEIGHT // (self.graph_height + 2))
+        self.cell_size = min(self.GRAPH_PANEL_WIDTH // (self.graph_width + 2), self.GRAPH_PANEL_HEIGHT // (self.graph_height + 2))
 
     def set_backtracker(self):
         self.gen_algorithm = GenType.BACKTRACKER

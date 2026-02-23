@@ -11,6 +11,7 @@ class AlgorithmRunner:
     """
 
     def __init__(self):
+        self.state_info = []
         self.generator = None
         self.solver = None
         self.generating = False
@@ -39,6 +40,7 @@ class AlgorithmRunner:
                 self.solver = None
         
         self.graph = self.get_graph()
+        self.state_info = self.get_state_info()
 
     def get_graph(self):
         if self.generator:
@@ -63,6 +65,10 @@ class AlgorithmRunner:
 
     def start_solve(self):
         """Initialises the solving algorithm to be used."""
+
+        if not self.graph:
+            return
+        
         self.clean_graph()
 
         for cell in self.graph:
@@ -91,3 +97,11 @@ class AlgorithmRunner:
                         continue
                     case _:
                         self.graph[row][col] = NodeType.EMPTY
+
+    def get_state_info(self):
+        if self.solver:
+            return self.solver.get_state_info()
+        elif self.generator:
+            return self.generator.get_state_info()
+        return self.state_info
+    

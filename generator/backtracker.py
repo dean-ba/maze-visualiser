@@ -79,4 +79,7 @@ class BacktrackerGenerator:
             self.grid[row][col] = NodeType.PATH
 
         return False
+
+    def get_state_info(self):
+        return []
     

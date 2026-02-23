@@ -38,7 +38,8 @@ def main():
         runner.handle_tick()
         graph = runner.get_graph()
 
-        drawer.draw_settings_panel()
+        drawer.draw_algorithm_panel()
+        drawer.draw_environment_panel()
         drawer.draw_graph_panel(graph)
 
         pygame.display.flip()

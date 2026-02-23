@@ -89,3 +89,10 @@ class Dijkstra:
 
         return True
     
+    def get_state_info(self):
+        visited_count = sum(1 for row in self.graph for cell in row if cell == NodeType.VISITED or cell == NodeType.PATH)
+        path_length = self.target.distance if self.target else "N/A"
+
+        return (f"Vertices left: {len(self.vertices)}",
+                f"Visited: {visited_count}",
+                f"Path length: {path_length}")

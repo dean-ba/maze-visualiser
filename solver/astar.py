@@ -84,3 +84,6 @@ class Astar:
         self.closed.append(current)
         return True
     
+    def get_state_info(self):
+        pass
+    
