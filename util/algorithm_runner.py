@@ -1,5 +1,6 @@
 from generator.backtracker import BacktrackerGenerator
 from solver.astar import Astar
+from solver.dijkstra import Dijkstra
 from util.node_type import NodeType
 from util.gen_type import GenType
 from util.solve_type import SolveType
@@ -54,7 +55,6 @@ class AlgorithmRunner:
                 case GenType.BACKTRACKER:
                     self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
                 case GenType.PRIM:
-                    print("Prims")
                     self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
                 case _:
                     return
@@ -63,14 +63,31 @@ class AlgorithmRunner:
 
     def start_solve(self):
         """Initialises the solving algorithm to be used."""
+        self.clean_graph()
+
+        for cell in self.graph:
+            if cell != NodeType.EMPTY or cell != NodeType.WALL:
+                cell = NodeType.EMPTY
 
         if not self.generating and not self.solving:
             match self.config.solve_algorithm:
                 case SolveType.ASTAR:
                     self.solver = Astar(self.graph)
                 case SolveType.DIJKSTRA:
-                    print("Change to Dijsktra")
-                    self.solver = Astar(self.graph)
+                    self.solver = Dijkstra(self.graph)
                 case _:
                     return
             self.solving = True
+
+    def clean_graph(self):
+        rows = len(self.graph)
+        cols = len(self.graph[0])
+        for row in range(rows):
+            for col in range(cols):
+                match self.graph[row][col]:
+                    case NodeType.WALL:
+                        continue
+                    case NodeType.EMPTY:
+                        continue
+                    case _:
+                        self.graph[row][col] = NodeType.EMPTY

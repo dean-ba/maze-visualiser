@@ -3,10 +3,10 @@ from util.node_type import NodeType
 class Node:
     """
     Helper class for storing graph node information.
-    pos: node position in graph
-    g_cost: distance from node to start position
-    h_cost: manhattan distance from node to target node
-    parent: node searched before current node
+    pos: node position in graph.
+    g_cost: distance from node to start position.
+    h_cost: manhattan distance from node to target node.
+    parent: node searched before current node.
     """
 
     def __init__(self, pos, g_cost, h_cost, parent):

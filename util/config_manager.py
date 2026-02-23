@@ -18,7 +18,7 @@ class ConfigManager:
         self.gen_algorithm = GenType.BACKTRACKER
         self.solve_algorithm = SolveType.ASTAR
 
-        self.tick_rate = 60
+        self.tick_rate = 30
         self.font = pygame.font.SysFont("arial", 18)
         self.graph_width = 21
         self.graph_height = 21
@@ -32,7 +32,7 @@ class ConfigManager:
             Button((10, 250, 150, 40), "Blank", self.set_backtracker, self.font, self.WHITE),
             Button((10, 300, 150, 40), "Blank", self.set_backtracker, self.font, self.WHITE),
             Button((10, 380, 150, 40), "A*", self.set_astar, self.font, self.WHITE),
-            Button((10, 430, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
+            Button((10, 430, 150, 40), "Dijkstra", self.set_dijkstra, self.font, self.WHITE),
             Button((10, 480, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
             Button((10, 530, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
             Button((10, 580, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
