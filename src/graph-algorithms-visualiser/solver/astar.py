@@ -31,6 +31,8 @@ class Astar:
         self.closed = []
         self.target = self.rows - 2, self.cols - 2
         self.path_node = None
+        self.visited_count = 0
+        self.current = self.open[0]
 
     def get_neighbors(self, cell):
         """Gets all cells adjacent to the current cell that are not walls."""
@@ -59,21 +61,22 @@ class Astar:
         if not self.open:
             return False
 
-        current = min(self.open, key=lambda x: x.f_cost)
-        self.open.remove(current)
-        self.graph[current.pos[0]][current.pos[1]] = NodeType.VISITED
+        self.current = min(self.open, key=lambda x: x.f_cost)
+        self.visited_count += 1
+        self.open.remove(self.current)
+        self.graph[self.current.pos[0]][self.current.pos[1]] = NodeType.VISITED
 
-        neighbours = self.get_neighbors(current.pos)
+        neighbours = self.get_neighbors(self.current.pos)
 
         for neighbour in neighbours:
             if neighbour == self.target:
                 self.solved = True
-                self.path_node = Node(neighbour, 0, 0, current)
+                self.path_node = Node(neighbour, 0, 0, self.current)
                 return True
             else:
-                g_cost = current.g_cost + 1
+                g_cost = self.current.g_cost + 1
                 h_cost = abs(neighbour[0] - self.target[0]) + abs(neighbour[1] - self.target[1])
-                neighbour_node = Node(neighbour, g_cost, h_cost, current)
+                neighbour_node = Node(neighbour, g_cost, h_cost, self.current)
 
                 in_open = any(node.pos == neighbour and node.f_cost < neighbour_node.f_cost for node in self.open)
                 in_closed = any(node.pos == neighbour and node.f_cost < neighbour_node.f_cost for node in self.closed)
@@ -81,9 +84,13 @@ class Astar:
                 if not in_open and not in_closed:
                     self.open.append(neighbour_node)
 
-        self.closed.append(current)
+        self.closed.append(self.current)
         return True
     
     def get_state_info(self):
-        pass
+        return (f"Open set size: {len(self.open)}",
+                f"Closed set size: {len(self.closed)}",
+                f"Visited: {self.visited_count}",
+                f"Current position: {self.current.pos}",
+                f"{"Path length: " if self.solved else "Current F cost:"} {self.current.f_cost}")
     

@@ -35,10 +35,15 @@ class Drawer:
              self.config.ENVIRONMENT_PANEL_WIDTH, 
              self.config.ENVIRONMENT_PANEL_HEIGHT))
     
-        for index, info_label in enumerate(self.runner.state_info, 1):
+        for index, info_label in enumerate(self.runner.generator_state_info, 1):
             self.screen.blit(
                 self.config.font.render(info_label, True, self.config.WHITE), 
                 (self.config.ALGORITHM_PANEL_WIDTH + 10, self.config.GRAPH_PANEL_HEIGHT + (20 * index)))
+        
+        for index, info_label in enumerate(self.runner.solver_state_info, 1):
+            self.screen.blit(
+                self.config.font.render(info_label, True, self.config.WHITE),  # MAY NEED TO UPDATE WIDTH
+                (self.config.ALGORITHM_PANEL_WIDTH + 250, self.config.GRAPH_PANEL_HEIGHT + (20 * index)))
 
     def draw_graph_panel(self, graph):
         """Draws the graph centered on the graph panel."""

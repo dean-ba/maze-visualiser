@@ -37,6 +37,7 @@ class Dijkstra:
         self.target = self.find_node((self.rows - 2, self.cols - 2))
         start = self.find_node((1, 1))
         start.distance = 0
+        self.visited_count = 0
 
     def get_neighbors(self, cell):
         """Gets all nodes adjacent to the current cell that are not visited yet."""
@@ -78,6 +79,7 @@ class Dijkstra:
             return True
         
         current = min(self.vertices, key=lambda x: x.distance)
+        self.visited_count += 1
         self.vertices.remove(current)
         self.graph[current.pos[0]][current.pos[1]] = NodeType.VISITED
 
@@ -90,9 +92,6 @@ class Dijkstra:
         return True
     
     def get_state_info(self):
-        visited_count = sum(1 for row in self.graph for cell in row if cell == NodeType.VISITED or cell == NodeType.PATH)
-        path_length = self.target.distance if self.target else "N/A"
-
         return (f"Vertices left: {len(self.vertices)}",
-                f"Visited: {visited_count}",
-                f"Path length: {path_length}")
+                f"Visited: {self.visited_count}",
+                f"Path length: {self.target.distance}")

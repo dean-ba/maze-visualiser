@@ -10,7 +10,10 @@ pygame.display.set_caption("Graph Algorithms Visualiser")
 runner = AlgorithmRunner()
 config = ConfigManager(
     runner.start_gen, 
-    runner.start_solve
+    runner.start_solve,
+    WINDOW_WIDTH=1000,
+    WINDOW_HEIGHT=800, 
+    tick_rate=60
     )
 runner.config = config
 clock = pygame.time.Clock()

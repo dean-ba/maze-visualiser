@@ -6,9 +6,9 @@ from util.solve_type import SolveType
 class ConfigManager:
     """Class to handle all configuration for the project."""
 
-    def __init__(self, start_gen, start_solve):
-        self.WINDOW_WIDTH = 1000
-        self.WINDOW_HEIGHT = 800
+    def __init__(self, start_gen, start_solve, WINDOW_WIDTH=1000, WINDOW_HEIGHT=800, tick_rate=60):
+        self.WINDOW_WIDTH = WINDOW_WIDTH
+        self.WINDOW_HEIGHT = WINDOW_HEIGHT
         self.ALGORITHM_PANEL_WIDTH = 200
         self.ALGORITHM_PANEL_HEIGHT = self.WINDOW_HEIGHT
         self.ENVIRONMENT_PANEL_WIDTH = self.WINDOW_WIDTH - self.ALGORITHM_PANEL_WIDTH
@@ -23,7 +23,7 @@ class ConfigManager:
         self.gen_algorithm = GenType.BACKTRACKER
         self.solve_algorithm = SolveType.ASTAR
 
-        self.tick_rate = 10
+        self.tick_rate = tick_rate
         self.font = pygame.font.SysFont("arial", 18)
         self.graph_width = 21
         self.graph_height = 21

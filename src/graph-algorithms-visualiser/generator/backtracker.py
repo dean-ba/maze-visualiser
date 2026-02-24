@@ -24,6 +24,8 @@ class BacktrackerGenerator:
         self.grid[start_row][start_col] = 0
 
         self.stack = [self.start_cell]
+        self.visited_count = 0
+        self.backtracks = 0
 
     def get_unvisited_neighbors(self, cell):
         """
@@ -56,6 +58,7 @@ class BacktrackerGenerator:
             return True
         
         current_cell = self.stack.pop()
+        self.visited_count += 1
         neighbors = self.get_unvisited_neighbors(current_cell)
 
         if neighbors:
@@ -68,6 +71,8 @@ class BacktrackerGenerator:
             self.grid[next_cell[0]][next_cell[1]] = NodeType.PATH
 
             self.stack.append(next_cell)
+        else:
+            self.backtracks += 1
 
         for row in range(self.rows):
             for col in range(self.cols):
@@ -79,7 +84,35 @@ class BacktrackerGenerator:
             self.grid[row][col] = NodeType.PATH
 
         return False
+    
+    def count_leaf_nodes(self):
+        leaf_count = 0
+
+        for row in range(1, self.rows, 2):
+            for col in range(1, self.cols, 2):
+
+                if self.grid[row][col] == NodeType.WALL:
+                    continue
+
+                connections = 0
+
+                if self.grid[row - 1][col] == NodeType.EMPTY:
+                    connections += 1
+                if self.grid[row + 1][col] == NodeType.EMPTY:
+                    connections += 1
+                if self.grid[row][col - 1] == NodeType.EMPTY:
+                    connections += 1
+                if self.grid[row][col + 1] == NodeType.EMPTY:
+                    connections += 1
+
+                if connections == 1:
+                    leaf_count += 1
+
+        return leaf_count
 
     def get_state_info(self):
-        return []
+        return (f"Stack size: {len(self.stack)}",
+                f"Visited: {self.visited_count}",
+                f"Backtracks: {self.backtracks}",
+                f"Leaf nodes: {self.count_leaf_nodes()}")
     
