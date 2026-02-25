@@ -32,7 +32,7 @@ class ConfigManager:
 
         self.buttons = [
             Button((10, 50, 150, 40), "Backtracker", self.set_backtracker, self.font, self.WHITE),
-            Button((10, 100, 150, 40), "Blank", self.set_backtracker, self.font, self.WHITE),
+            Button((10, 100, 150, 40), "Eller", self.set_eller, self.font, self.WHITE),
             Button((10, 150, 150, 40), "Blank", self.set_backtracker, self.font, self.WHITE),
             Button((10, 200, 150, 40), "Blank", self.set_backtracker, self.font, self.WHITE),
             Button((10, 250, 150, 40), "Blank", self.set_backtracker, self.font, self.WHITE),
@@ -91,8 +91,8 @@ class ConfigManager:
     def set_backtracker(self):
         self.gen_algorithm = GenType.BACKTRACKER
 
-    def set_prim(self):
-        self.gen_algorithm = GenType.PRIM
+    def set_eller(self):
+        self.gen_algorithm = GenType.ELLER
 
     def set_astar(self):
         self.solve_algorithm = SolveType.ASTAR

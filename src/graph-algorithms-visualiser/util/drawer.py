@@ -81,7 +81,7 @@ class Drawer:
                 rect = pygame.Rect(
                     left + col * self.runner.cell_size,
                     top + row * self.runner.cell_size,
-                    self.runner.cell_size,
-                    self.runner.cell_size
+                    self.runner.cell_size - 1, # -1 to view cell borders for easier debugging
+                    self.runner.cell_size - 1
                 )
                 pygame.draw.rect(self.screen, colour, rect)

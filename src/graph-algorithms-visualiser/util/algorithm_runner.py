@@ -1,4 +1,5 @@
 from generator.backtracker import BacktrackerGenerator
+from generator.eller import EllerGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
 from util.node_type import NodeType
@@ -58,8 +59,8 @@ class AlgorithmRunner:
             match self.config.gen_algorithm:
                 case GenType.BACKTRACKER:
                     self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
-                case GenType.PRIM:
-                    self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
+                case GenType.ELLER:
+                    self.generator = EllerGenerator(self.config.graph_height, self.config.graph_width)
                 case _:
                     return
             self.cell_size = self.config.cell_size
@@ -74,8 +75,6 @@ class AlgorithmRunner:
 
         if not self.generating and not self.solving:
             self.clean_graph()
-
-            
 
             match self.config.solve_algorithm:
                 case SolveType.ASTAR:
