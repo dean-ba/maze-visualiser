@@ -71,14 +71,12 @@ class AlgorithmRunner:
 
         if not self.graph:
             return
-        
-        self.clean_graph()
-
-        for cell in self.graph:
-            if cell != NodeType.EMPTY or cell != NodeType.WALL:
-                cell = NodeType.EMPTY
 
         if not self.generating and not self.solving:
+            self.clean_graph()
+
+            
+
             match self.config.solve_algorithm:
                 case SolveType.ASTAR:
                     self.solver = Astar(self.graph)

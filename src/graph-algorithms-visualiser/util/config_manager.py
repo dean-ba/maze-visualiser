@@ -1,3 +1,4 @@
+import math
 import pygame
 from util.button import Button
 from util.gen_type import GenType
@@ -41,8 +42,9 @@ class ConfigManager:
             Button((10, 480, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
             Button((10, 530, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
             Button((10, 580, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
-            Button((10, 650, 150, 40), "Generate", start_gen, self.font, self.WHITE),
-            Button((10, 700, 150, 40), "Solve", start_solve, self.font, self.WHITE),
+            Button((10, 650, 150, 40), f"Speed: {self.tick_rate}", self.cycle_tick_rate, self.font, self.WHITE),
+            Button((10, 700, 80, 40), "Generate", start_gen, self.font, self.WHITE),
+            Button((100, 700, 70, 40), "Solve", start_solve, self.font, self.WHITE),
         ]
 
         self.labels = [
@@ -69,6 +71,22 @@ class ConfigManager:
             case _:
                 return
         self.cell_size = min(self.GRAPH_PANEL_WIDTH // (self.graph_width + 2), self.GRAPH_PANEL_HEIGHT // (self.graph_height + 2))
+
+    def cycle_tick_rate(self):
+        match self.tick_rate:
+            case 1:
+                self.tick_rate = 5
+            case 5:
+                self.tick_rate = 20
+            case 20:
+                self.tick_rate = 50
+            case 50:
+                self.tick_rate = 100
+            case 100:
+                self.tick_rate = 101
+            case _:
+                self.tick_rate = 1
+        self.buttons[11] = Button((10, 650, 150, 40), f"Speed: {self.tick_rate}", self.cycle_tick_rate, self.font, self.WHITE)
 
     def set_backtracker(self):
         self.gen_algorithm = GenType.BACKTRACKER

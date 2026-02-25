@@ -13,7 +13,7 @@ config = ConfigManager(
     runner.start_solve,
     WINDOW_WIDTH=1000,
     WINDOW_HEIGHT=800, 
-    tick_rate=60
+    tick_rate=100
     )
 runner.config = config
 clock = pygame.time.Clock()
