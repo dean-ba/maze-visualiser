@@ -4,7 +4,7 @@ from util.node_type import NodeType
 class BacktrackerGenerator:
     """
     Class that generates a maze using a backtracking algorithm with a stack.
-    The maze is a 2D grid, where 0 = path, 1 = wall, and 2 = current cell.
+    The maze is a 2D grid of walls and empty cells.
     Cells are every point in the grid where the row and column is odd.
     """
 

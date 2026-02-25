@@ -1,113 +1,142 @@
 import random
 from util.node_type import NodeType
 
-class Node:
-    def __init__(self, set):
-        self.set = set
-        self.east = False
-        self.south = False
-
 class EllerGenerator:
+    """
+    Class that generates a maze using Eller's algorithm using sets.
+    The maze is a 2D grid of walls and empty cells.
+    Cells are every point in the grid where the row and column is odd.
+    """
 
     def __init__(self, rows, cols):
+        """
+        Initialises the generator with a grid of walls, and an empty dictionary of rows. 
+        row_sets is a dictionary that contains a dictionary for each row.
+        Each row dictionary holds positions as keys and set ID's as values.
+        """
+
         rows = rows if rows % 2 == 1 else rows + 1
         cols = cols if cols % 2 == 1 else cols + 1
 
-        self.rows = rows
         self.cols = cols
-        self.grid = [[NodeType.EMPTY for _ in range(cols)] for _ in range(rows)]
-        self.grid[0] = [NodeType.WALL for _ in range(cols)]
-        self.current_row = [Node(0) for _ in range((cols - 1) // 2)]
-        self.current_row_num = 0
-        self.new_set_num = 1
-
+        self.rows = rows
+        self.grid = [[NodeType.WALL for _ in range(self.cols)] for _ in range(self.rows)]
+        self.row_sets = {}
+        self.set_id_counter = 0
+        self.current_row = 1
 
     def gen_sets(self):
-        for index, node in enumerate(self.current_row):
-            if node.set == 0:
-                node.set = self.new_set_num
-                self.new_set_num += 1
+        """
+        Initialises a new row in row_sets.
+        positions are added to the new row, and given a new set ID if their parent created a south wall.
+        """
+        
+        if self.current_row not in self.row_sets:
+            self.row_sets[self.current_row] = {}
+
+        for col in range(1, self.cols, 2):
+            if col not in self.row_sets[self.current_row]:
+                self.row_sets[self.current_row][col] = self.set_id_counter
+                self.set_id_counter += 1
+            self.grid[self.current_row][col] = NodeType.EMPTY
+
+    def remove_east_walls(self):
+        """
+        Removes the east wall of cells if they are not part of the same set.
+        East walls are also removed at random.
+        If the final row is being generated, east walls between different sets are always removed
+
+        If a wall is removed, the sets are then merged.
+        """
+
+        for pos in range(1, self.cols - 2, 2):
+            if self.row_sets[self.current_row][pos] != self.row_sets[self.current_row][pos + 2]:
+                if random.choice([True, False]) or self.current_row == self.rows - 2:
+                    self.grid[self.current_row][pos + 1] = NodeType.EMPTY
+                    old_set = self.row_sets[self.current_row][pos + 2]
+                    new_set = self.row_sets[self.current_row][pos]
+                    
+                    for cell in self.row_sets[self.current_row]:
+                        if self.row_sets[self.current_row][cell] == old_set:
+                            self.row_sets[self.current_row][cell] = new_set
     
-    def union(self, set_1, set_2):
-        self.new_set_num += 1
-        for index, node in enumerate(self.current_row):
-            if node.set == set_1 or node.set == set_2:
-                node.set = set_2
-    
-    def not_isolated(self, set):
-        open_count = 0
+    def create_south_passages(self):
+        """
+        Cells are categorised into sets, then south passages are carved into the maze.
+        South passages can be made at random, but each set must have at least one cell with a south passage.
+        This ensures that the graph is fully connected.
+        """
+        
+        new_row_sets = {}
+        set_cells = {}
 
-        for node in self.current_row:
-            if node.set == set and not node.south:
-                open_count += 1
-                if open_count > 1:
-                    return True
-                
-        return False
+        for col in self.row_sets[self.current_row]:
+            cell_set = self.row_sets[self.current_row][col]
+            if cell_set not in set_cells:
+                set_cells[cell_set] = []
+            set_cells[cell_set].append(col)
 
-    def gen_row(self):
-        for i in range(len(self.current_row) - 1): #east walls
-            if self.current_row[i].set == self.current_row[i + 1].set or random.choice([True, False]):
-                self.current_row[i].east = True
-            else:
-                self.union(self.current_row[i].set, self.current_row[i + 1].set)
-        self.current_row[len(self.current_row) - 1].east = True
+        for cell_set, cells in set_cells.items():
+            south_passages = 0
+            last_cell = None
+            for c in cells:
+                if random.choice([True, False]) or len(cells) == 1:
+                    self.grid[self.current_row + 1][c] = NodeType.EMPTY
+                    self.grid[self.current_row + 2][c] = NodeType.EMPTY
+                    new_row_sets[c] = cell_set
+                    south_passages += 1
+                last_cell = c
 
-        for index, node in enumerate(self.current_row):
-            if random.choice([True, False]) and self.not_isolated(node.set):
-                node.south = True
+            if south_passages == 0:
+                self.grid[self.current_row + 1][last_cell] = NodeType.EMPTY
+                self.grid[self.current_row + 2][last_cell] = NodeType.EMPTY
+                new_row_sets[last_cell] = cell_set
 
-    def reset_row(self):
-        for col, node in enumerate(self.current_row):
-            node.east = False
-            if node.south:
-                node.set = 0
-                node.south = False
-
-    def update_grid(self):
-        grid_idx = self.current_row_num * 2 + 1
-        self.grid[grid_idx][0] = NodeType.WALL
-        self.grid[grid_idx + 1][0] = NodeType.WALL
-
-        for col, node in enumerate(self.current_row):
-            if node.east:
-                self.grid[grid_idx + 1][col * 2 + 2] = NodeType.WALL
-                self.grid[grid_idx][col * 2 + 2] = NodeType.WALL
-                self.grid[grid_idx - 1][col * 2 + 2] = NodeType.WALL
-            if node.south:
-                self.grid[grid_idx + 1][col * 2 + 2] = NodeType.WALL
-                self.grid[grid_idx + 1][col * 2 + 1] = NodeType.WALL
-                self.grid[grid_idx + 1][col * 2] = NodeType.WALL
-                
-
+        self.row_sets[self.current_row + 2] = new_row_sets      
 
     def step(self):
+        """
+        Carries out one step of generation.
+        Each step generates a single row.
+        """
 
-        if self.current_row_num < self.rows / 2 - 2:
-
-            self.gen_sets()
-
-            self.gen_row()
-
-            self.update_grid()
-
-            self.current_row_num += 1
-
-            if self.current_row_num < self.rows / 2 - 2:
-                self.reset_row()
-            return False
+        if self.current_row >= self.rows:
+            return True
         
-        for i in range(len(self.current_row) - 1):
-            self.current_row[i].south = True
+        self.gen_sets()
+        self.remove_east_walls()    
+        if self.current_row < self.rows - 2:
+            self.create_south_passages()
+        self.current_row += 2
 
-            if self.current_row[i].set != self.current_row[i + 1].set:
-                self.current_row[i].east = False
-                self.union(self.current_row[i].set, self.current_row[i + 1].set)
+        return False
+    
+    def count_leaf_nodes(self):
+        leaf_count = 0
 
-        self.update_grid()
+        for row in range(1, self.rows, 2):
+            for col in range(1, self.cols, 2):
 
-        return True
+                if self.grid[row][col] == NodeType.WALL:
+                    continue
 
+                connections = 0
+
+                if self.grid[row - 1][col] == NodeType.EMPTY:
+                    connections += 1
+                if self.grid[row + 1][col] == NodeType.EMPTY:
+                    connections += 1
+                if self.grid[row][col - 1] == NodeType.EMPTY:
+                    connections += 1
+                if self.grid[row][col + 1] == NodeType.EMPTY:
+                    connections += 1
+
+                if connections == 1:
+                    leaf_count += 1
+
+        return leaf_count
+    
     def get_state_info(self):
-        return (f"",
-                f"")
+        return (f"Leaf nodes: {self.count_leaf_nodes()}", 
+                f"Active sets: {len(set(self.row_sets.get(self.current_row, {}).values()))}")
+    
