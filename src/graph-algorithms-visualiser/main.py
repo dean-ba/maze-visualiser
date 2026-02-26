@@ -17,8 +17,8 @@ config = ConfigManager(
     )
 runner.config = config
 clock = pygame.time.Clock()
-screen = pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT))
-drawer = Drawer(screen, config, runner)
+screen = pygame.display.set_mode((config.WINDOW_WIDTH, config.WINDOW_HEIGHT), pygame.RESIZABLE)
+drawer = Drawer(screen, pygame.font.SysFont("arial", 18))
 
 def main():
     running = True
@@ -41,9 +41,11 @@ def main():
         runner.handle_tick()
         graph = runner.get_graph()
 
-        drawer.draw_algorithm_panel()
-        drawer.draw_environment_panel()
-        drawer.draw_graph_panel(graph)
+        drawer.draw_algorithm_panel(config.labels, config.buttons, config.ALGORITHM_PANEL_COLOUR, config.ALGORITHM_PANEL_WIDTH, config.ALGORITHM_PANEL_HEIGHT)
+        drawer.draw_environment_panel(runner.generator_state_info, runner.solver_state_info, config.ENVIRONMENT_PANEL_COLOUR, config.ALGORITHM_PANEL_WIDTH, config.GRAPH_PANEL_HEIGHT, config.ENVIRONMENT_PANEL_WIDTH, config.ENVIRONMENT_PANEL_HEIGHT)
+        drawer.draw_graph_panel(graph, config.GRAPH_PANEL_COLOUR, config.ALGORITHM_PANEL_WIDTH, config.GRAPH_PANEL_WIDTH, config.GRAPH_PANEL_HEIGHT, config.WINDOW_WIDTH, config.ALGORITHM_PANEL_WIDTH)
+
+        # config.WINDOW_WIDTH, config.WINDOW_HEIGHT = screen.get_size() # for resizing window
 
         pygame.display.flip()
 

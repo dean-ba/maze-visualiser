@@ -1,59 +1,60 @@
 import pygame
-from util.node_type import NodeType
+from util.enum import NodeType
 
 class Drawer:
     """
     Class to draw the algorithm panel and graph to the screen with provided values.
     """
     
-    def __init__(self, screen, config, runner):
+    def __init__(self, screen, font):
         self.screen = screen
-        self.config = config
-        self.runner = runner
+        self.font = font
+        self.text_colour = (255, 255, 255)
 
-    def draw_algorithm_panel(self):
+    def draw_algorithm_panel(self, labels, buttons, panel_colour, panel_width, panel_height):
         pygame.draw.rect(
             self.screen, 
-            self.config.ALGORITHM_PANEL_COLOUR, 
+            panel_colour, 
             (0, 
              0, 
-             self.config.ALGORITHM_PANEL_WIDTH, 
-             self.config.ALGORITHM_PANEL_HEIGHT))
+             panel_width, 
+             panel_height))
 
-        for label in self.config.labels:
-            self.screen.blit(self.config.font.render(label[0], True, self.config.WHITE), label[1])
+        for label in labels:
+            self.screen.blit(self.font.render(label[0], True, self.text_colour), label[1])
 
-        for button in self.config.buttons:
+        for button in buttons:
             button.draw(self.screen)
         
-    def draw_environment_panel(self):
+    def draw_environment_panel(self, gen_state_info, solve_state_info, colour, start_x, start_y, width, height):
         pygame.draw.rect(
             self.screen, 
-            self.config.ENVIRONMENT_PANEL_COLOUR, 
-            (self.config.ALGORITHM_PANEL_WIDTH, 
-             self.config.GRAPH_PANEL_HEIGHT, 
-             self.config.ENVIRONMENT_PANEL_WIDTH, 
-             self.config.ENVIRONMENT_PANEL_HEIGHT))
+            colour, 
+            (start_x, 
+             start_y, 
+             width, 
+             height))
     
-        for index, info_label in enumerate(self.runner.generator_state_info, 1):
+        for index, info_label in enumerate(gen_state_info, 1):
             self.screen.blit(
-                self.config.font.render(info_label, True, self.config.WHITE), 
-                (self.config.ALGORITHM_PANEL_WIDTH + 10, self.config.GRAPH_PANEL_HEIGHT + (20 * index)))
+                self.font.render(info_label, True, self.text_colour), 
+                (width + 10, height + (20 * index)))
         
-        for index, info_label in enumerate(self.runner.solver_state_info, 1):
+        for index, info_label in enumerate(solve_state_info, 1):
             self.screen.blit(
-                self.config.font.render(info_label, True, self.config.WHITE),  # MAY NEED TO UPDATE WIDTH
-                (self.config.ALGORITHM_PANEL_WIDTH + 250, self.config.GRAPH_PANEL_HEIGHT + (20 * index)))
+                self.font.render(info_label, True, self.text_colour),
+                (width + 250, height + (20 * index)))
 
-    def draw_graph_panel(self, graph):
+    def draw_graph_panel(self, graph, colour, start_x, width, height, window_width, algorithm_panel_width):
         """Draws the graph centered on the graph panel."""
 
         pygame.draw.rect(
             self.screen, 
-            self.config.GRAPH_PANEL_COLOUR, 
-            (self.config.ALGORITHM_PANEL_WIDTH, 
-             0, self.config.GRAPH_PANEL_WIDTH, 
-             self.config.GRAPH_PANEL_HEIGHT))
+            colour, 
+            (start_x, 
+             0, 
+             width, 
+             height))
         
         if graph is None:
             return
@@ -61,8 +62,10 @@ class Drawer:
         rows = len(graph)
         cols = len(graph[0])
 
-        left = ((self.config.WINDOW_WIDTH + self.config.ALGORITHM_PANEL_WIDTH) / 2 - cols * self.runner.cell_size / 2)
-        top = (self.config.GRAPH_PANEL_HEIGHT / 2 - rows * self.runner.cell_size / 2)
+        cell_size = min(width // (cols + 2), height // (rows + 2))
+
+        left = ((window_width + algorithm_panel_width) / 2 - cols * cell_size / 2)
+        top = (height / 2 - rows * cell_size / 2)
 
         for row in range(rows):
             for col in range(cols):
@@ -79,9 +82,9 @@ class Drawer:
                         colour = (255, 255, 255)
 
                 rect = pygame.Rect(
-                    left + col * self.runner.cell_size,
-                    top + row * self.runner.cell_size,
-                    self.runner.cell_size,
-                    self.runner.cell_size
+                    left + col * cell_size,
+                    top + row * cell_size,
+                    cell_size,
+                    cell_size
                 )
                 pygame.draw.rect(self.screen, colour, rect)

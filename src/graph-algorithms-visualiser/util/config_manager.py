@@ -1,8 +1,8 @@
 import math
 import pygame
 from util.button import Button
-from util.gen_type import GenType
-from util.solve_type import SolveType
+from util.enum import GenType
+from util.enum import SolveType
 
 class ConfigManager:
     """Class to handle all configuration for the project."""

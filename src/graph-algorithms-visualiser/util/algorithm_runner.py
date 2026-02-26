@@ -2,9 +2,9 @@ from generator.backtracker import BacktrackerGenerator
 from generator.eller import EllerGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
-from util.node_type import NodeType
-from util.gen_type import GenType
-from util.solve_type import SolveType
+from util.enum import GenType
+from util.enum import NodeType
+from util.enum import SolveType
 
 class AlgorithmRunner:
     """

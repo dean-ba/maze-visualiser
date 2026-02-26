@@ -1,5 +1,5 @@
 import math
-from util.node_type import NodeType
+from util.enum import NodeType
 
 class Node:
     """
