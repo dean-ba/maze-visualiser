@@ -88,6 +88,8 @@ class Astar:
         return True
     
     def get_state_info(self):
+        """Returns real time data about the algorithm."""
+        
         return (f"Open set size: {len(self.open)}",
                 f"Closed set size: {len(self.closed)}",
                 f"Visited: {self.visited_count}",

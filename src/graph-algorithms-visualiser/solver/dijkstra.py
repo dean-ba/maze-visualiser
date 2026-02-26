@@ -92,6 +92,8 @@ class Dijkstra:
         return True
     
     def get_state_info(self):
+        """Returns real time data about the algorithm."""
+        
         return (f"Vertices left: {len(self.vertices)}",
                 f"Visited: {self.visited_count}",
                 f"Path length: {self.target.distance}")

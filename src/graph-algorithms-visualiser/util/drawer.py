@@ -12,6 +12,8 @@ class Drawer:
         self.text_colour = (255, 255, 255)
 
     def draw_algorithm_panel(self, labels, buttons, panel_colour, panel_width, panel_height):
+        """Draws the panel containing options for generation and solving algorithms."""
+
         pygame.draw.rect(
             self.screen, 
             panel_colour, 
@@ -27,6 +29,8 @@ class Drawer:
             button.draw(self.screen)
         
     def draw_environment_panel(self, gen_state_info, solve_state_info, colour, start_x, start_y, width, height):
+        """Draws the environment panel containing generation and solving information that updates in real time."""
+
         pygame.draw.rect(
             self.screen, 
             colour, 
@@ -38,12 +42,12 @@ class Drawer:
         for index, info_label in enumerate(gen_state_info, 1):
             self.screen.blit(
                 self.font.render(info_label, True, self.text_colour), 
-                (width + 10, height + (20 * index)))
+                (start_x + 10, start_y + (20 * index)))
         
         for index, info_label in enumerate(solve_state_info, 1):
             self.screen.blit(
                 self.font.render(info_label, True, self.text_colour),
-                (width + 250, height + (20 * index)))
+                (start_x + 250, start_y + (20 * index)))
 
     def draw_graph_panel(self, graph, colour, start_x, width, height, window_width, algorithm_panel_width):
         """Draws the graph centered on the graph panel."""

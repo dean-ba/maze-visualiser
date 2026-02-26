@@ -12,6 +12,8 @@ class AlgorithmRunner:
     """
 
     def __init__(self):
+        """Initialises the class with no generator or solver, and no state information."""
+
         self.generator_state_info = []
         self.solver_state_info = []
         self.generator = None
@@ -19,8 +21,6 @@ class AlgorithmRunner:
         self.generating = False
         self.solving = False
         self.graph = None
-        self.config = None
-        self.cell_size = 0
 
     def handle_tick(self):
         """Carries out a single step of the currently running algorithm."""
@@ -46,28 +46,29 @@ class AlgorithmRunner:
         self.generator_state_info = self.generator.get_state_info() if self.generator else self.generator_state_info
 
     def get_graph(self):
+        """Updates the graph held by the class if an algorithm has an updated one."""
+
         if self.generator:
             return self.generator.grid
         elif self.solver:
             return self.solver.graph
         return self.graph
 
-    def start_gen(self):
+    def start_gen(self, gen_algorithm, rows, cols):
         """Initialises the generation algorithm to be used."""
 
         if not self.generating and not self.solving:
-            match self.config.gen_algorithm:
+            match gen_algorithm:
                 case GenType.BACKTRACKER:
-                    self.generator = BacktrackerGenerator(self.config.graph_height, self.config.graph_width)
+                    self.generator = BacktrackerGenerator(rows, cols)
                 case GenType.ELLER:
-                    self.generator = EllerGenerator(self.config.graph_height, self.config.graph_width)
+                    self.generator = EllerGenerator(rows, cols)
                 case _:
                     return
-            self.cell_size = self.config.cell_size
             self.generating = True
             self.solver_state_info = []
 
-    def start_solve(self):
+    def start_solve(self, solve_algorithm):
         """Initialises the solving algorithm to be used."""
 
         if not self.graph:
@@ -76,7 +77,7 @@ class AlgorithmRunner:
         if not self.generating and not self.solving:
             self.clean_graph()
 
-            match self.config.solve_algorithm:
+            match solve_algorithm:
                 case SolveType.ASTAR:
                     self.solver = Astar(self.graph)
                 case SolveType.DIJKSTRA:
@@ -86,6 +87,8 @@ class AlgorithmRunner:
             self.solving = True
 
     def clean_graph(self):
+        """Function to reset search and path cells to empty cells for a new solving algorithm."""
+
         rows = len(self.graph)
         cols = len(self.graph[0])
         for row in range(rows):

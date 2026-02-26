@@ -37,6 +37,14 @@ def main():
             
             for button in config.buttons:
                 button.handle_event(event)
+            
+        if config.gen_start:
+            runner.start_gen(config.gen_algorithm, config.graph_height, config.graph_width)
+            config.gen_start = False
+
+        if config.solve_start:
+            runner.start_solve(config.solve_algorithm)
+            config.solve_start = False
 
         runner.handle_tick()
         graph = runner.get_graph()

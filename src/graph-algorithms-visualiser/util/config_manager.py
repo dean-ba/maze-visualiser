@@ -1,4 +1,3 @@
-import math
 import pygame
 from util.button import Button
 from util.enum import GenType
@@ -23,6 +22,8 @@ class ConfigManager:
         self.WHITE = (255, 255, 255)
         self.gen_algorithm = GenType.BACKTRACKER
         self.solve_algorithm = SolveType.ASTAR
+        self.gen_start = False
+        self.solve_start = False
 
         self.tick_rate = tick_rate
         self.font = pygame.font.SysFont("arial", 18)
@@ -43,8 +44,8 @@ class ConfigManager:
             Button((10, 530, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
             Button((10, 580, 150, 40), "Blank", self.set_astar, self.font, self.WHITE),
             Button((10, 650, 150, 40), f"Speed: {self.tick_rate}", self.cycle_tick_rate, self.font, self.WHITE),
-            Button((10, 700, 80, 40), "Generate", start_gen, self.font, self.WHITE),
-            Button((100, 700, 70, 40), "Solve", start_solve, self.font, self.WHITE),
+            Button((10, 700, 80, 40), "Generate", self.start_gen, self.font, self.WHITE),
+            Button((100, 700, 70, 40), "Solve", self.start_solve, self.font, self.WHITE),
         ]
 
         self.labels = [
@@ -99,3 +100,9 @@ class ConfigManager:
 
     def set_dijkstra(self):
         self.solve_algorithm = SolveType.DIJKSTRA
+
+    def start_gen(self):
+        self.gen_start = True
+
+    def start_solve(self):
+        self.solve_start = True

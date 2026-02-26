@@ -112,6 +112,8 @@ class EllerGenerator:
         return False
     
     def count_leaf_nodes(self):
+        """Function to count the amount of leaf nodes (dead ends) in a graph."""
+
         leaf_count = 0
 
         for row in range(1, self.rows, 2):
@@ -137,6 +139,8 @@ class EllerGenerator:
         return leaf_count
     
     def get_state_info(self):
+        """Returns real time data about the algorithm."""
+        
         return (f"Leaf nodes: {self.count_leaf_nodes()}", 
                 f"Active sets: {len(set(self.row_sets.get(self.current_row, {}).values()))}")
     
