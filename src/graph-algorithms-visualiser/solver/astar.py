@@ -104,7 +104,6 @@ class Astar:
         
         return (f"Open set size: {len(self.open)}",
                 f"Closed set size: {len(self.closed)}",
-                f"Visited: {self.visited_count}",
                 f"Current position: {self.current.pos}",
                 f"{"Path length: " if self.solved else "Current F cost:"} {self.current.f_cost}")
     

@@ -24,6 +24,7 @@ class EllerGenerator:
         self.row_sets = {}
         self.set_id_counter = 0
         self.current_row = 1
+        self.gen_type = 'E'
 
     def gen_sets(self):
         """
@@ -103,11 +104,16 @@ class EllerGenerator:
         if self.current_row >= self.rows:
             return True
         
-        self.gen_sets()
-        self.remove_east_walls()    
-        if self.current_row < self.rows - 2:
-            self.create_south_passages()
-        self.current_row += 2
+        if self.gen_type == 'E':
+            self.gen_sets()
+            self.remove_east_walls()
+
+        if self.gen_type == 'S':
+            if self.current_row < self.rows - 2:
+                self.create_south_passages()
+            self.current_row += 2
+
+        self.gen_type = 'S' if self.gen_type == 'E' else 'E'
 
         return False
     
