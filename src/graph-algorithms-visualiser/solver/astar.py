@@ -66,23 +66,35 @@ class Astar:
         self.open.remove(self.current)
         self.graph[self.current.pos[0]][self.current.pos[1]] = NodeType.VISITED
 
+        if self.current.pos == self.target:
+            self.solved = True
+            self.path_node = self.current
+            return True
+
         neighbours = self.get_neighbors(self.current.pos)
 
         for neighbour in neighbours:
-            if neighbour == self.target:
-                self.solved = True
-                self.path_node = Node(neighbour, 0, 0, self.current)
-                return True
+            in_closed = any(node.pos == neighbour for node in self.closed)
+            if in_closed:
+                continue
+            
+            g_cost = self.current.g_cost + 1
+            h_cost = abs(neighbour[0] - self.target[0]) + abs(neighbour[1] - self.target[1])
+            
+            existing_node = None
+            for node in self.open:
+                if node.pos == neighbour:
+                    existing_node = node
+                    break
+            
+            if existing_node:
+                if g_cost < existing_node.g_cost:
+                    existing_node.g_cost = g_cost
+                    existing_node.f_cost = g_cost + existing_node.h_cost
+                    existing_node.parent = self.current
             else:
-                g_cost = self.current.g_cost + 1
-                h_cost = abs(neighbour[0] - self.target[0]) + abs(neighbour[1] - self.target[1])
                 neighbour_node = Node(neighbour, g_cost, h_cost, self.current)
-
-                in_open = any(node.pos == neighbour and node.f_cost < neighbour_node.f_cost for node in self.open)
-                in_closed = any(node.pos == neighbour and node.f_cost < neighbour_node.f_cost for node in self.closed)
-
-                if not in_open and not in_closed:
-                    self.open.append(neighbour_node)
+                self.open.append(neighbour_node)
 
         self.closed.append(self.current)
         return True

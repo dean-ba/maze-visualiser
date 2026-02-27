@@ -63,6 +63,8 @@ class AlgorithmRunner:
                     self.generator = BacktrackerGenerator(rows, cols)
                 case GenType.ELLER:
                     self.generator = EllerGenerator(rows, cols)
+                case GenType.KRUSKAL:                    
+                    self.generator = EllerGenerator(rows, cols)
                 case _:
                     return
             self.generating = True

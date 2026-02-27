@@ -34,7 +34,7 @@ class ConfigManager:
         self.buttons = [
             Button((25, 50, 150, 40), "Backtracker", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 100, 150, 40), "Eller", self.set_eller, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 150, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
+            Button((25, 150, 150, 40), "Kruskal", self.set_kruskal, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 200, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 250, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 300, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
@@ -109,6 +109,9 @@ class ConfigManager:
 
     def set_eller(self):
         self.gen_algorithm = GenType.ELLER
+    
+    def set_kruskal(self):
+        self.gen_algorithm = GenType.KRUSKAL
 
     def set_astar(self):
         self.solve_algorithm = SolveType.ASTAR
