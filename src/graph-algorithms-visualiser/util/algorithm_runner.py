@@ -1,5 +1,6 @@
 from generator.backtracker import BacktrackerGenerator
 from generator.eller import EllerGenerator
+from generator.kruskal import KruskalGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
 from util.enum import GenType
@@ -64,7 +65,7 @@ class AlgorithmRunner:
                 case GenType.ELLER:
                     self.generator = EllerGenerator(rows, cols)
                 case GenType.KRUSKAL:                    
-                    self.generator = EllerGenerator(rows, cols)
+                    self.generator = KruskalGenerator(rows, cols)
                 case _:
                     return
             self.generating = True
