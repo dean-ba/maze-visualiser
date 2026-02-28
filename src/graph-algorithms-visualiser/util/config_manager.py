@@ -40,7 +40,7 @@ class ConfigManager:
             Button((25, 300, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 380, 150, 40), "A*", self.set_astar, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 430, 150, 40), "Dijkstra", self.set_dijkstra, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 480, 150, 40), "Blank", self.set_astar, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
+            Button((25, 480, 150, 40), "DEF", self.set_dead_end_filler, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 530, 150, 40), "Blank", self.set_astar, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 580, 150, 40), "Blank", self.set_astar, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 650, 150, 40), f"Speed: {self.tick_rate}", self.cycle_tick_rate, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
@@ -118,6 +118,9 @@ class ConfigManager:
 
     def set_dijkstra(self):
         self.solve_algorithm = SolveType.DIJKSTRA
+
+    def set_dead_end_filler(self):
+        self.solve_algorithm = SolveType.DEAD_END_FILLER
 
     def start_gen(self):
         self.gen_start = True

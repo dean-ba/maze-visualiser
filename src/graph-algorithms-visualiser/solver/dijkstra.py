@@ -91,6 +91,12 @@ class Dijkstra:
 
         return True
     
+    def path_step(self):
+        """Finds the next step in the path using the current node's parent."""
+        
+        self.graph[self.path_node.pos[0]][self.path_node.pos[1]] = NodeType.PATH
+        self.path_node = self.path_node.parent
+    
     def get_state_info(self):
         """Returns real time data about the algorithm."""
         

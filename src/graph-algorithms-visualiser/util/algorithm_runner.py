@@ -3,6 +3,7 @@ from generator.eller import EllerGenerator
 from generator.kruskal import KruskalGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
+from solver.dead_end_filling import DeadEndFiller
 from util.enum import GenType
 from util.enum import NodeType
 from util.enum import SolveType
@@ -36,9 +37,9 @@ class AlgorithmRunner:
             if self.solver.solved or not solvable:
                 self.solving = False
 
-        if self.solver and self.solver.path_node != None:
-            self.solver.graph[self.solver.path_node.pos[0]][self.solver.path_node.pos[1]] = NodeType.PATH
-            self.solver.path_node = self.solver.path_node.parent
+        if self.solver and self.solver.solved:
+            if self.solver.path_node != None:
+                self.solver.path_step()
             if not self.solver.path_node:
                 self.solver = None
         
@@ -85,6 +86,8 @@ class AlgorithmRunner:
                     self.solver = Astar(self.graph)
                 case SolveType.DIJKSTRA:
                     self.solver = Dijkstra(self.graph)
+                case SolveType.DEAD_END_FILLER:
+                    self.solver = DeadEndFiller(self.graph)
                 case _:
                     return
             self.solving = True
