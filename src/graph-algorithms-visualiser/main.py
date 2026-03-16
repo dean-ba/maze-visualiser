@@ -41,7 +41,7 @@ def main():
         runner.handle_tick()
 
         drawer.draw_algorithm_panel(config.labels, config.buttons, config.ALGORITHM_PANEL_COLOUR, 
-                                    config.ALGORITHM_PANEL_WIDTH, config.ALGORITHM_PANEL_HEIGHT)
+                                    config.ALGORITHM_PANEL_WIDTH, config.ALGORITHM_PANEL_HEIGHT, config.WINDOW_WIDTH, config.WINDOW_HEIGHT)
         
         drawer.draw_environment_panel(runner.generator_state_info, runner.solver_state_info, config.ENVIRONMENT_PANEL_COLOUR, config.ALGORITHM_PANEL_WIDTH, 
                                       config.GRAPH_PANEL_HEIGHT, config.ENVIRONMENT_PANEL_WIDTH, config.ENVIRONMENT_PANEL_HEIGHT)

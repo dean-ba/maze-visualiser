@@ -10,9 +10,28 @@ class Drawer:
         self.screen = screen
         self.font = font
         self.text_colour = (255, 255, 255)
+        self.window_size = None
+        self.minimum_window_size = 800
 
-    def draw_algorithm_panel(self, labels, buttons, panel_colour, panel_width, panel_height):
+    def draw_algorithm_panel(self, labels, buttons, panel_colour, panel_width, panel_height, *window_size):
         """Draws the panel containing options for generation and solving algorithms."""
+        self.window_size = window_size
+
+        if self.window_size[0] < self.minimum_window_size or self.window_size[1] < self.minimum_window_size:
+            pygame.draw.rect(
+            self.screen, 
+            panel_colour, 
+            (0, 
+             0, 
+             window_size[0], 
+             window_size[1]))
+            line_1 = self.font.render(f"Screen size: {window_size[0]}x{window_size[1]}", True, (255,255,255))
+            line_2 = self.font.render(f"Minimum required size: {self.minimum_window_size}x{self.minimum_window_size}", True, (255,255,255))
+
+            cx, cy = self.screen.get_rect().center
+            self.screen.blit(line_1, line_1.get_rect(center=(cx, cy - 10)))
+            self.screen.blit(line_2, line_2.get_rect(center=(cx, cy + 10)))
+            return
 
         pygame.draw.rect(
             self.screen, 
@@ -30,6 +49,9 @@ class Drawer:
         
     def draw_environment_panel(self, gen_state_info, solve_state_info, colour, start_x, start_y, width, height):
         """Draws the environment panel containing generation and solving information that updates in real time."""
+
+        if self.window_size[0]  < 800 or self.window_size[1] < 800:
+            return
 
         pygame.draw.rect(
             self.screen, 
@@ -51,6 +73,9 @@ class Drawer:
 
     def draw_graph_panel(self, graph, colour, start_x, width, height, window_width, algorithm_panel_width):
         """Draws the graph centered on the graph panel."""
+
+        if self.window_size[0]  < 800 or self.window_size[1] < 800:
+            return
 
         pygame.draw.rect(
             self.screen, 
