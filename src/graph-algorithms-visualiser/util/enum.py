@@ -4,6 +4,7 @@ class GenType(Enum):
     BACKTRACKER = 1
     ELLER = 2
     KRUSKAL = 3
+    PRIM = 4
     
 class NodeType(Enum):
     EMPTY = 0

@@ -3,7 +3,7 @@ from util.enum import NodeType
 
 class KruskalGenerator:
     """
-    Class that generates a maze 
+    Class that generates a maze using Kruskal's algorithm.
     """
 
     def __init__(self, rows, cols):
@@ -84,7 +84,6 @@ class KruskalGenerator:
             choice = 'V' if random.choice([True, False]) else 'H'
 
         wall = random.choice(self.v_walls) if choice == 'V' else random.choice(self.h_walls)
-        wall = self.v_walls[0] if choice == 'V' else self.h_walls[0]
         
         if choice == 'V':
             self.v_walls.remove(wall)
@@ -132,3 +131,4 @@ class KruskalGenerator:
         return (f"Wall list size: {len(self.v_walls) + len(self.h_walls)}",
                 f"Total number of sets: {len(set(self.nodes.values()))}",
                 f"Leaf nodes: {self.count_leaf_nodes()}")
+    

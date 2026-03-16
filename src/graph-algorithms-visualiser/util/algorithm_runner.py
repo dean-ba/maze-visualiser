@@ -1,6 +1,7 @@
 from generator.backtracker import BacktrackerGenerator
 from generator.eller import EllerGenerator
 from generator.kruskal import KruskalGenerator
+from generator.prim import PrimGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
 from solver.dead_end_filling import DeadEndFiller
@@ -68,6 +69,8 @@ class AlgorithmRunner:
                     self.generator = EllerGenerator(rows, cols)
                 case GenType.KRUSKAL:                    
                     self.generator = KruskalGenerator(rows, cols)
+                case GenType.PRIM:
+                    self.generator = PrimGenerator(rows, cols)
                 case _:
                     return
             self.generating = True
