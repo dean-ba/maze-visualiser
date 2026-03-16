@@ -36,7 +36,7 @@ class ConfigManager:
             Button((25, 100, 150, 40), "Eller", self.set_eller, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 150, 150, 40), "Kruskal", self.set_kruskal, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 200, 150, 40), "Prim", self.set_prim, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 250, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
+            Button((25, 250, 150, 40), "Aldous-Broder", self.set_aldous_broder, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 300, 150, 40), "Blank", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 380, 150, 40), "A*", self.set_astar, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
             Button((25, 430, 150, 40), "Dijkstra", self.set_dijkstra, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
@@ -115,6 +115,9 @@ class ConfigManager:
 
     def set_prim(self):
         self.gen_algorithm = GenType.PRIM
+    
+    def set_aldous_broder(self):
+        self.gen_algorithm = GenType.ALDOUS_BRODER
 
     def set_astar(self):
         self.solve_algorithm = SolveType.ASTAR

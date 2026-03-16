@@ -5,6 +5,7 @@ class GenType(Enum):
     ELLER = 2
     KRUSKAL = 3
     PRIM = 4
+    ALDOUS_BRODER = 5
     
 class NodeType(Enum):
     EMPTY = 0
