@@ -84,6 +84,7 @@ class KruskalGenerator:
             choice = 'V' if random.choice([True, False]) else 'H'
 
         wall = random.choice(self.v_walls) if choice == 'V' else random.choice(self.h_walls)
+        wall = self.v_walls[0] if choice == 'V' else self.h_walls[0]
         
         if choice == 'V':
             self.v_walls.remove(wall)

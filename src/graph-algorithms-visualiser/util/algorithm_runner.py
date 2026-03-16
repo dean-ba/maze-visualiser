@@ -4,6 +4,7 @@ from generator.kruskal import KruskalGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
 from solver.dead_end_filling import DeadEndFiller
+from solver.backtracker import BacktrackerSolver
 from util.enum import GenType
 from util.enum import NodeType
 from util.enum import SolveType
@@ -88,6 +89,8 @@ class AlgorithmRunner:
                     self.solver = Dijkstra(self.graph)
                 case SolveType.DEAD_END_FILLER:
                     self.solver = DeadEndFiller(self.graph)
+                case SolveType.BACKTRACKER_SOLVER:
+                    self.solver = BacktrackerSolver(self.graph)
                 case _:
                     return
             self.solving = True

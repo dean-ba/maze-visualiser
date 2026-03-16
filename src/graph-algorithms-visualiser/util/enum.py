@@ -15,4 +15,5 @@ class SolveType(Enum):
     ASTAR = 1
     DIJKSTRA = 2
     DEAD_END_FILLER = 3
+    BACKTRACKER_SOLVER = 4
     
