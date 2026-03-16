@@ -50,7 +50,7 @@ class ConfigManager:
 
         self.labels = [
             ("Generation Algorithm", (10, 20)),
-            ("Solving Algorithm", (10, 350)),
+            ("Solving Algorithm", (30, 350)),
             (f"Width: {self.graph_width}", (50, 750)),
             (f"Height: {self.graph_height}", (50, 770)),
         ]

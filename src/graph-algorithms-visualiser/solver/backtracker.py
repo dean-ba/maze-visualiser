@@ -78,7 +78,8 @@ class BacktrackerSolver:
     def get_state_info(self):
         """Returns real time data about the algorithm."""
 
-        return (f"Current position: {self.current}",
+        return (f"Backtracking Solver", f"",
+                f"Current position: {self.current}",
                 f"Stack size: {len(self.stack)}",
                 f"Total visited nodes: {len(self.visited)}")
     

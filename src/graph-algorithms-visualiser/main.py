@@ -14,10 +14,11 @@ drawer = Drawer(screen, pygame.font.SysFont("arial", 18))
 clock = pygame.time.Clock()
 
 def main():
+    accumulated_time = 0.0
     running = True
 
     while running:
-        clock.tick(config.tick_rate)
+        accumulated_time += clock.tick(60) / 1000
         screen.fill((255, 255, 255))
 
         for event in pygame.event.get():
@@ -37,8 +38,11 @@ def main():
         if config.solve_start:
             runner.start_solve(config.solve_algorithm)
             config.solve_start = False
-
-        runner.handle_tick()
+        
+        tick_interval = 1 / config.tick_rate
+        while accumulated_time >= tick_interval:
+            accumulated_time -= tick_interval
+            runner.handle_tick()
 
         drawer.draw_algorithm_panel(config.labels, config.buttons, config.ALGORITHM_PANEL_COLOUR, 
                                     config.ALGORITHM_PANEL_WIDTH, config.ALGORITHM_PANEL_HEIGHT, config.WINDOW_WIDTH, config.WINDOW_HEIGHT)

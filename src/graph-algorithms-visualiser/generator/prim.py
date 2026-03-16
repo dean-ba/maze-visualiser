@@ -1,5 +1,6 @@
 import random
 from util.enum import NodeType
+import util.graphinfo as graphinfo
 
 class PrimGenerator:
     """
@@ -100,6 +101,9 @@ class PrimGenerator:
     def get_state_info(self):
         """Returns real time data about the algorithm."""
 
-        return (f"Wall list size: {len(self.v_walls) + len(self.h_walls)}", 
-                f"Visited nodes: {len(self.visited)}")
+        return (f"Prim's Algorithm Generator", f"",
+                f"Vertical Wall list size: {len(self.v_walls)}",
+                f"Horizontal Wall list size: {len(self.h_walls)}",
+                f"Visited nodes: {len(self.visited)}",
+                f"Leaf nodes: {graphinfo.count_leaf_nodes(self.grid)}")
     

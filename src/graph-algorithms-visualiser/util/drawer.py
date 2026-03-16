@@ -25,8 +25,8 @@ class Drawer:
              0, 
              window_size[0], 
              window_size[1]))
-            line_1 = self.font.render(f"Screen size: {window_size[0]}x{window_size[1]}", True, (255,255,255))
-            line_2 = self.font.render(f"Minimum required size: {self.minimum_window_size}x{self.minimum_window_size}", True, (255,255,255))
+            line_1 = self.font.render(f"Screen size: {window_size[0]}x{window_size[1]}", True, self.text_colour)
+            line_2 = self.font.render(f"Minimum required size: {self.minimum_window_size}x{self.minimum_window_size}", True, self.text_colour)
 
             cx, cy = self.screen.get_rect().center
             self.screen.blit(line_1, line_1.get_rect(center=(cx, cy - 10)))
@@ -64,12 +64,14 @@ class Drawer:
         for index, info_label in enumerate(gen_state_info, 1):
             self.screen.blit(
                 self.font.render(info_label, True, self.text_colour), 
-                (start_x + 10, start_y + (20 * index)))
+                (start_x + 10, start_y - 10 + (20 * index)))
         
         for index, info_label in enumerate(solve_state_info, 1):
             self.screen.blit(
                 self.font.render(info_label, True, self.text_colour),
-                (start_x + 250, start_y + (20 * index)))
+                (start_x + 300, start_y - 10 + (20 * index)))
+        
+        self.screen.blit(self.font.render("Use the arrow keys to change the width and height of the graph.", True, self.text_colour), (start_x + 10, start_y + height - 25))
 
     def draw_graph_panel(self, graph, colour, start_x, width, height, window_width, algorithm_panel_width):
         """Draws the graph centered on the graph panel."""

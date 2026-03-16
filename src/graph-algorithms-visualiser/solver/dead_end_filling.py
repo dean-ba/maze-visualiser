@@ -120,7 +120,8 @@ class DeadEndFiller:
     def get_state_info(self):
         """Returns real time data about the algorithm."""
         
-        return (f"Leaves to check: {len(self.leaves)}",
+        return (f"Dead End Filling Solver", f"",
+                f"Leaves to check: {len(self.leaves)}",
                 f"Visited cells: {self.visited_cells}",
                 f"Solved: {self.solved}")
     

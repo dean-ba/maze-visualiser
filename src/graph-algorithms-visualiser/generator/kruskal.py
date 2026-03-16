@@ -1,5 +1,6 @@
 import random
 from util.enum import NodeType
+import util.graphinfo as graphinfo
 
 class KruskalGenerator:
     """
@@ -98,37 +99,12 @@ class KruskalGenerator:
             node_right = (wall[0], wall[1] + 1)
             self.compare_nodes(node_left, node_right, wall)
 
-    def count_leaf_nodes(self):
-        """Function to count the amount of leaf nodes (dead ends) in a graph."""
-
-        leaf_count = 0
-
-        for row in range(1, self.rows, 2):
-            for col in range(1, self.cols, 2):
-
-                if self.grid[row][col] == NodeType.WALL:
-                    continue
-
-                connections = 0
-
-                if self.grid[row - 1][col] == NodeType.EMPTY:
-                    connections += 1
-                if self.grid[row + 1][col] == NodeType.EMPTY:
-                    connections += 1
-                if self.grid[row][col - 1] == NodeType.EMPTY:
-                    connections += 1
-                if self.grid[row][col + 1] == NodeType.EMPTY:
-                    connections += 1
-
-                if connections == 1:
-                    leaf_count += 1
-
-        return leaf_count
-
     def get_state_info(self):
         """Returns real time data about the algorithm."""
 
-        return (f"Wall list size: {len(self.v_walls) + len(self.h_walls)}",
+        return (f"Kruskal's Algorithm Generator", f"",
+                f"Vertical Wall list size: {len(self.v_walls)}",
+                f"Horizontal Wall list size: {len(self.h_walls)}",
                 f"Total number of sets: {len(set(self.nodes.values()))}",
-                f"Leaf nodes: {self.count_leaf_nodes()}")
+                f"Leaf nodes: {graphinfo.count_leaf_nodes(self.grid)}")
     

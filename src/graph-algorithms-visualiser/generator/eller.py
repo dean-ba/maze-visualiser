@@ -1,5 +1,6 @@
 import random
 from util.enum import NodeType
+import util.graphinfo as graphinfo
 
 class EllerGenerator:
     """
@@ -24,6 +25,7 @@ class EllerGenerator:
         self.row_sets = {}
         self.set_id_counter = 0
         self.current_row = 1
+        self.passages = 0
         self.gen_type = 'E'
 
     def gen_sets(self):
@@ -53,6 +55,7 @@ class EllerGenerator:
         for pos in range(1, self.cols - 2, 2):
             if self.row_sets[self.current_row][pos] != self.row_sets[self.current_row][pos + 2]:
                 if random.choice([True, False]) or self.current_row == self.rows - 2:
+                    self.passages += 1
                     self.grid[self.current_row][pos + 1] = NodeType.EMPTY
                     old_set = self.row_sets[self.current_row][pos + 2]
                     new_set = self.row_sets[self.current_row][pos]
@@ -82,6 +85,7 @@ class EllerGenerator:
             last_cell = None
             for c in cells:
                 if random.choice([True, False]) or len(cells) == 1:
+                    self.passages += 1
                     self.grid[self.current_row + 1][c] = NodeType.EMPTY
                     self.grid[self.current_row + 2][c] = NodeType.EMPTY
                     new_row_sets[c] = cell_set
@@ -101,6 +105,8 @@ class EllerGenerator:
         Each step generates a single row.
         """
 
+        self.passages = 0
+
         if self.current_row >= self.rows:
             return True
         
@@ -117,36 +123,11 @@ class EllerGenerator:
 
         return False
     
-    def count_leaf_nodes(self):
-        """Function to count the amount of leaf nodes (dead ends) in a graph."""
-
-        leaf_count = 0
-
-        for row in range(1, self.rows, 2):
-            for col in range(1, self.cols, 2):
-
-                if self.grid[row][col] == NodeType.WALL:
-                    continue
-
-                connections = 0
-
-                if self.grid[row - 1][col] == NodeType.EMPTY:
-                    connections += 1
-                if self.grid[row + 1][col] == NodeType.EMPTY:
-                    connections += 1
-                if self.grid[row][col - 1] == NodeType.EMPTY:
-                    connections += 1
-                if self.grid[row][col + 1] == NodeType.EMPTY:
-                    connections += 1
-
-                if connections == 1:
-                    leaf_count += 1
-
-        return leaf_count
-    
     def get_state_info(self):
         """Returns real time data about the algorithm."""
         
-        return (f"Leaf nodes: {self.count_leaf_nodes()}", 
-                f"Active sets: {len(set(self.row_sets.get(self.current_row, {}).values()))}")
+        return (f"Eller's Algorithm Generator", f"",
+                f"Active sets: {len(set(self.row_sets.get(self.current_row, {}).values()))}",
+                f"Passages created this step: {self.passages}",
+                f"Leaf nodes: {graphinfo.count_leaf_nodes(self.grid)}")
     

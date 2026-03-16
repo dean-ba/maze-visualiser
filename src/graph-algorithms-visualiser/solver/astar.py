@@ -108,7 +108,8 @@ class Astar:
     def get_state_info(self):
         """Returns real time data about the algorithm."""
         
-        return (f"Open set size: {len(self.open)}",
+        return (f"A* Algorithm Solver", f"",
+                f"Open set size: {len(self.open)}",
                 f"Closed set size: {len(self.closed)}",
                 f"Current position: {self.current.pos}",
                 f"{"Path length: " if self.solved else "Current F cost:"} {self.current.f_cost}")
