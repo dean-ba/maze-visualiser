@@ -75,6 +75,6 @@ class AldousBroderGenerator:
         
         return (f"Aldous-Broder Generator", f"",
                 f"Steps: {self.steps}",
-                f"Visited: {len(self.visited)}",
+                f"Unique cells visited: {len(self.visited)}",
                 f"Leaf nodes: {graphinfo.count_leaf_nodes(self.grid)}")
     
