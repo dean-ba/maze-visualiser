@@ -5,7 +5,7 @@ from util.algorithm_runner import AlgorithmRunner
 from util.drawer import Drawer
 
 pygame.init()
-pygame.display.set_caption("Graph Algorithms Visualiser")
+pygame.display.set_caption("Maze Algorithms Visualiser")
 
 runner = AlgorithmRunner()
 config = ConfigManager()

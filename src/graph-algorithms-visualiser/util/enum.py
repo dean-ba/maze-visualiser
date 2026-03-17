@@ -6,6 +6,7 @@ class GenType(Enum):
     KRUSKAL = 3
     PRIM = 4
     ALDOUS_BRODER = 5
+    WILSON = 6
     
 class NodeType(Enum):
     EMPTY = 0

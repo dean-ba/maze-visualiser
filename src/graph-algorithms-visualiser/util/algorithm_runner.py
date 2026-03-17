@@ -3,6 +3,7 @@ from generator.eller import EllerGenerator
 from generator.kruskal import KruskalGenerator
 from generator.prim import PrimGenerator
 from generator.aldous_broder import AldousBroderGenerator
+from generator.wilson import WilsonGenerator
 from solver.astar import Astar
 from solver.dijkstra import Dijkstra
 from solver.dead_end_filling import DeadEndFiller
@@ -74,6 +75,8 @@ class AlgorithmRunner:
                     self.generator = PrimGenerator(rows, cols)
                 case GenType.ALDOUS_BRODER:
                     self.generator = AldousBroderGenerator(rows, cols)
+                case GenType.WILSON:
+                    self.generator = WilsonGenerator(rows, cols)
                 case _:
                     return
             self.generating = True
