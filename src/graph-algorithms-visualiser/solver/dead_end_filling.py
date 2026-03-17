@@ -1,6 +1,5 @@
 import random
 from util.enum import NodeType
-from util import graphinfo
 
 class DeadEndFiller:
 
@@ -11,7 +10,7 @@ class DeadEndFiller:
         self.start = 1, 1
         self.target = self.rows - 2, self.cols - 2
         self.solved = False
-        self.leaves = graphinfo.count_leaf_nodes(graph)
+        self.leaves = self.get_leaf_positions()
         random.shuffle(self.leaves)
         self.current_cell = None
         self.path_node = None
@@ -89,6 +88,33 @@ class DeadEndFiller:
                 and self.graph[new_row][new_col] == NodeType.EMPTY
                 ):
                 self.path_node = (new_row, new_col)
+
+    def get_leaf_positions(self):
+        """Function to get the positions of leaf nodes (dead ends) in a graph."""
+
+        leaves = []
+
+        for row in range(1, self.rows, 2):
+            for col in range(1, self.cols, 2):
+
+                if self.graph[row][col] == NodeType.WALL:
+                    continue
+
+                connections = 0
+
+                if self.graph[row - 1][col] == NodeType.EMPTY:
+                    connections += 1
+                if self.graph[row + 1][col] == NodeType.EMPTY:
+                    connections += 1
+                if self.graph[row][col - 1] == NodeType.EMPTY:
+                    connections += 1
+                if self.graph[row][col + 1] == NodeType.EMPTY:
+                    connections += 1
+
+                if connections == 1:
+                    leaves.append((row, col))
+
+        return leaves
 
     def get_state_info(self):
         """Returns real time data about the algorithm."""
