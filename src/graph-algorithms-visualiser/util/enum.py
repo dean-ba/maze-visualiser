@@ -19,4 +19,5 @@ class SolveType(Enum):
     DIJKSTRA = 2
     DEAD_END_FILLER = 3
     BACKTRACKER_SOLVER = 4
+    RANDOM_MOUSE = 5
     
