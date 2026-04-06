@@ -15,6 +15,7 @@ class Drawer:
 
     def draw_algorithm_panel(self, labels, buttons, panel_colour, panel_width, panel_height, *window_size):
         """Draws the panel containing options for generation and solving algorithms."""
+        
         self.window_size = window_size
 
         if self.window_size[0] < self.minimum_window_size or self.window_size[1] < self.minimum_window_size:
@@ -70,8 +71,6 @@ class Drawer:
             self.screen.blit(
                 self.font.render(info_label, True, self.text_colour),
                 (start_x + 300, start_y - 10 + (20 * index)))
-        
-        self.screen.blit(self.font.render("Use the arrow keys to change the width and height of the graph.", True, self.text_colour), (start_x + 10, start_y + height - 25))
 
     def draw_graph_panel(self, graph, colour, start_x, width, height, window_width, algorithm_panel_width):
         """Draws the graph centered on the graph panel."""

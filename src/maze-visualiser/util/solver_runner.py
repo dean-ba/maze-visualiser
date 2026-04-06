@@ -14,7 +14,7 @@ class SolverRunner:
     def __init__(self):
         """Initialises the class with no solver, and no state information."""
 
-        self.solver_state_info = []
+        self.state_info = []
         self.generator = None
         self.solver = None
         self.generating = False
@@ -36,7 +36,7 @@ class SolverRunner:
                 self.solver = None
         
         self.graph = self.get_graph()
-        self.solver_state_info = self.solver.get_state_info() if self.solver else self.solver_state_info
+        self.state_info = self.solver.get_state_info() if self.solver else self.state_info
 
     def get_graph(self):
         """Updates the graph held by the class if an algorithm has an updated one."""

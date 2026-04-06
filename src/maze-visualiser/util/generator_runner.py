@@ -14,7 +14,7 @@ class GeneratorRunner:
     def __init__(self):
         """Initialises the class with no generator, and no state information."""
 
-        self.generator_state_info = []
+        self.state_info = []
         self.generator = None
         self.generating = False
         self.graph = None
@@ -29,7 +29,7 @@ class GeneratorRunner:
                 self.generator = None
         
         self.graph = self.get_graph()
-        self.generator_state_info = self.generator.get_state_info() if self.generator else self.generator_state_info
+        self.state_info = self.generator.get_state_info() if self.generator else self.state_info
 
     def get_graph(self):
         """Updates the graph held by the class if an algorithm has an updated one."""
