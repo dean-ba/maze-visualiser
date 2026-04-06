@@ -115,7 +115,7 @@ class MazeVisualiser:
         self.drawer.draw_algorithm_panel(
             self.config.labels, 
             self.config.buttons, 
-            self.config.ALGORITHM_PANEL_COLOUR, 
+            self.config.COLOURS["algorithm_panel"], 
             self.config.algorithm_panel_width, 
             self.config.algorithm_panel_height, 
             self.config.window_width, 
@@ -128,7 +128,7 @@ class MazeVisualiser:
         self.drawer.draw_environment_panel(
             self.gen_runner.state_info, 
             self.solver_runner.state_info, 
-            self.config.ENVIRONMENT_PANEL_COLOUR, 
+            self.config.COLOURS["environment_panel"], 
             self.config.algorithm_panel_width, 
             self.config.graph_panel_height, 
             self.config.environment_panel_width, 
@@ -140,10 +140,10 @@ class MazeVisualiser:
 
         self.drawer.draw_graph_panel(
             self.graph, 
-            self.config.GRAPH_PANEL_COLOUR, 
+            self.config.COLOURS["graph_panel"], 
             self.config.algorithm_panel_width, 
             self.config.graph_panel_width, 
             self.config.graph_panel_height, 
             self.config.window_width, 
-            self.config.ALGORITHM_PANEL_WIDTH
+            self.config.algorithm_panel_width
         )

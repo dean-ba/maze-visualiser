@@ -3,6 +3,18 @@ from util.button import Button
 from util.enum import GenType
 from util.enum import SolveType
 
+class ButtonFactory:
+    """Helper class to create buttons for the panels."""
+
+    def __init__(self, font, button_colour, border_colour):
+        self.font = font
+        self.button_colour = button_colour
+        self.border_colour = border_colour
+
+    def create_button(self, x, y, width, height, text, callback):
+        rect = (x, y, width, height)
+        return Button(rect, text, callback, self.font, self.button_colour, self.border_colour)
+
 class ConfigManager:
     """Class to handle all configuration for the project."""
 
@@ -10,6 +22,14 @@ class ConfigManager:
     DEFAULT_WINDOW_HEIGHT = 800
     ALGORITHM_PANEL_WIDTH = 200
     ENVIRONMENT_PANEL_HEIGHT = 200
+
+    COLOURS = {
+        "graph_panel": (40, 40, 40),
+        "algorithm_panel": (50, 50, 50),
+        "environment_panel": (50, 50, 50),
+        "button": (80, 80, 80),
+        "button_border": (40, 40, 40)
+    }
 
     def __init__(self, width = None, height = None):
         """Initialises the configuration manager with default values for the program."""
@@ -23,12 +43,6 @@ class ConfigManager:
         self.graph_panel_width = self.environment_panel_width
         self.graph_panel_height = self.window_height - self.environment_panel_height
 
-        self.GRAPH_PANEL_COLOUR = (40, 40, 40)
-        self.ALGORITHM_PANEL_COLOUR = (50, 50, 50)
-        self.ENVIRONMENT_PANEL_COLOUR = (50, 50, 50)
-        self.BUTTON_COLOUR = (80, 80, 80)
-        self.BUTTON_BORDER_COLOUR = (40, 40, 40)
-
         self.gen_algorithm = GenType.BACKTRACKER
         self.solve_algorithm = SolveType.ASTAR
         self.gen_start = False
@@ -38,26 +52,31 @@ class ConfigManager:
         self.graph_height = 21
 
         self.font = pygame.font.SysFont("arial", 18)
+        self.button_factory = ButtonFactory(self.font, self.COLOURS["button"], self.COLOURS["button_border"])
 
-        self.buttons = [
-            Button((25, 50, 150, 40), "Backtracker", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 100, 150, 40), "Eller", self.set_eller, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 150, 150, 40), "Kruskal", self.set_kruskal, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 200, 150, 40), "Prim", self.set_prim, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 250, 150, 40), "Aldous-Broder", self.set_aldous_broder, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 300, 150, 40), "Wilson", self.set_wilson, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 380, 150, 40), "A*", self.set_astar, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 430, 150, 40), "Dijkstra", self.set_dijkstra, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 480, 150, 40), "DEF", self.set_dead_end_filler, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 530, 150, 40), "Backtracker", self.set_backtracker_solver, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 580, 150, 40), "Random Mouse", self.set_random_mouse, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((25, 650, 150, 40), f"Speed: {self.tick_rate}", self.cycle_tick_rate, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((10, 700, 85, 40), "Generate", self.start_gen, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
-            Button((105, 700, 85, 40), "Solve", self.start_solve, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
+        self.algorithms = [
+            (50, "Backtracker", self.set_backtracker),
+            (100, "Eller", self.set_eller),
+            (150, "Kruskal", self.set_kruskal),
+            (200, "Prim", self.set_prim),
+            (250, "Aldous-Broder", self.set_aldous_broder),
+            (300, "Wilson", self.set_wilson),
+            (380, "A*", self.set_astar),
+            (430, "Dijkstra", self.set_dijkstra),
+            (480, "Dead End Filler", self.set_dead_end_filler),
+            (530, "Backtracker", self.set_backtracker_solver),
+            (580, "Random Mouse", self.set_random_mouse)
+        ]
+
+        self.buttons = [self.button_factory.create_button(25, y, 150, 40, text, callback) for y, text, callback in self.algorithms]
+        self.buttons += [
+            self.button_factory.create_button(25, 650, 150, 40, f"Speed: {self.tick_rate}", self.cycle_tick_rate),
+            self.button_factory.create_button(10, 700, 85, 40, "Generate", self.start_gen),
+            self.button_factory.create_button(105, 700, 85, 40, "Solve", self.start_solve)
         ]
 
         self.labels = [
-            ("Generation Algorithm", (10, 20)),
+            ("Generation Algorithm", (15, 20)),
             ("Solving Algorithm", (30, 350)),
             (f"Width: {self.graph_width}", (50, 750)),
             (f"Height: {self.graph_height}", (50, 770)),
@@ -96,7 +115,7 @@ class ConfigManager:
                 self.tick_rate = 1
             case _:
                 self.tick_rate = 1
-        self.buttons[11] = Button((25, 650, 150, 40), f"Speed: {self.tick_rate}", self.cycle_tick_rate, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR)
+        self.buttons[11] = self.button_factory.create_button(25, 650, 150, 40, f"Speed: {self.tick_rate}", self.cycle_tick_rate)
 
     def update_screen_size(self, width, height):
         """Dynamically updates panel sizes based on the new screen size. Option panels still require a minimum size to function correctly."""
