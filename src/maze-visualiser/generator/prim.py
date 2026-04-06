@@ -1,6 +1,6 @@
 import random
 from util.enum import NodeType
-import util.graphinfo as graphinfo
+import util.graph_info as graphinfo
 
 class PrimGenerator:
     """

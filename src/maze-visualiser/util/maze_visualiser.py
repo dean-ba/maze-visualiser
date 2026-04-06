@@ -16,7 +16,7 @@ class MazeVisualiser:
         self.config = ConfigManager()
         self.solver_runner = SolverRunner()
         self.gen_runner = GeneratorRunner()
-        self.screen = pygame.display.set_mode((self.config.WINDOW_WIDTH, self.config.WINDOW_HEIGHT), pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode((self.config.window_width, self.config.window_height), pygame.RESIZABLE)
         self.drawer = Drawer(self.screen, pygame.font.SysFont("arial", 18))
         self.clock = pygame.time.Clock()
 
@@ -116,10 +116,10 @@ class MazeVisualiser:
             self.config.labels, 
             self.config.buttons, 
             self.config.ALGORITHM_PANEL_COLOUR, 
-            self.config.ALGORITHM_PANEL_WIDTH, 
-            self.config.ALGORITHM_PANEL_HEIGHT, 
-            self.config.WINDOW_WIDTH, 
-            self.config.WINDOW_HEIGHT
+            self.config.algorithm_panel_width, 
+            self.config.algorithm_panel_height, 
+            self.config.window_width, 
+            self.config.window_height
         )
 
     def draw_environment_panel(self):
@@ -129,10 +129,10 @@ class MazeVisualiser:
             self.gen_runner.state_info, 
             self.solver_runner.state_info, 
             self.config.ENVIRONMENT_PANEL_COLOUR, 
-            self.config.ALGORITHM_PANEL_WIDTH, 
-            self.config.GRAPH_PANEL_HEIGHT, 
-            self.config.ENVIRONMENT_PANEL_WIDTH, 
-            self.config.ENVIRONMENT_PANEL_HEIGHT
+            self.config.algorithm_panel_width, 
+            self.config.graph_panel_height, 
+            self.config.environment_panel_width, 
+            self.config.environment_panel_height
         )
 
     def draw_graph_panel(self):
@@ -141,9 +141,9 @@ class MazeVisualiser:
         self.drawer.draw_graph_panel(
             self.graph, 
             self.config.GRAPH_PANEL_COLOUR, 
-            self.config.ALGORITHM_PANEL_WIDTH, 
-            self.config.GRAPH_PANEL_WIDTH, 
-            self.config.GRAPH_PANEL_HEIGHT, 
-            self.config.WINDOW_WIDTH, 
+            self.config.algorithm_panel_width, 
+            self.config.graph_panel_width, 
+            self.config.graph_panel_height, 
+            self.config.window_width, 
             self.config.ALGORITHM_PANEL_WIDTH
         )

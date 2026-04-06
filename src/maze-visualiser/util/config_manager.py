@@ -6,30 +6,38 @@ from util.enum import SolveType
 class ConfigManager:
     """Class to handle all configuration for the project."""
 
-    def __init__(self, WINDOW_WIDTH=1000, WINDOW_HEIGHT=800):
+    DEFAULT_WINDOW_WIDTH = 1000
+    DEFAULT_WINDOW_HEIGHT = 800
+    ALGORITHM_PANEL_WIDTH = 200
+    ENVIRONMENT_PANEL_HEIGHT = 200
+
+    def __init__(self, width = None, height = None):
         """Initialises the configuration manager with default values for the program."""
 
-        self.WINDOW_WIDTH = WINDOW_WIDTH
-        self.WINDOW_HEIGHT = WINDOW_HEIGHT
-        self.ALGORITHM_PANEL_WIDTH = 200
-        self.ALGORITHM_PANEL_HEIGHT = self.WINDOW_HEIGHT
-        self.ENVIRONMENT_PANEL_WIDTH = self.WINDOW_WIDTH - self.ALGORITHM_PANEL_WIDTH
-        self.ENVIRONMENT_PANEL_HEIGHT = 200
-        self.GRAPH_PANEL_WIDTH = self.ENVIRONMENT_PANEL_WIDTH
-        self.GRAPH_PANEL_HEIGHT = self.WINDOW_HEIGHT - self.ENVIRONMENT_PANEL_HEIGHT
+        self.window_width = width or self.DEFAULT_WINDOW_WIDTH
+        self.window_height = height or self.DEFAULT_WINDOW_HEIGHT
+        self.algorithm_panel_width = self.ALGORITHM_PANEL_WIDTH
+        self.algorithm_panel_height = self.window_height
+        self.environment_panel_width = self.window_width - self.algorithm_panel_width
+        self.environment_panel_height = self.ENVIRONMENT_PANEL_HEIGHT
+        self.graph_panel_width = self.environment_panel_width
+        self.graph_panel_height = self.window_height - self.environment_panel_height
+
         self.GRAPH_PANEL_COLOUR = (40, 40, 40)
         self.ALGORITHM_PANEL_COLOUR = (50, 50, 50)
         self.ENVIRONMENT_PANEL_COLOUR = (50, 50, 50)
         self.BUTTON_COLOUR = (80, 80, 80)
         self.BUTTON_BORDER_COLOUR = (40, 40, 40)
+
         self.gen_algorithm = GenType.BACKTRACKER
         self.solve_algorithm = SolveType.ASTAR
         self.gen_start = False
         self.solve_start = False
         self.tick_rate = 50
-        self.font = pygame.font.SysFont("arial", 18)
         self.graph_width = 21
         self.graph_height = 21
+
+        self.font = pygame.font.SysFont("arial", 18)
 
         self.buttons = [
             Button((25, 50, 150, 40), "Backtracker", self.set_backtracker, self.font, self.BUTTON_COLOUR, self.BUTTON_BORDER_COLOUR),
@@ -60,11 +68,11 @@ class ConfigManager:
 
         match event.key:
             case pygame.K_DOWN:
-                self.graph_height -= 2 if self.graph_height > 3 else 0
+                self.graph_height = max(3, self.graph_height - 2)
             case pygame.K_UP:
                 self.graph_height += 2
             case pygame.K_LEFT:
-                self.graph_width -= 2 if self.graph_width > 3 else 0
+                self.graph_width = max(3, self.graph_width - 2)
             case pygame.K_RIGHT:
                 self.graph_width += 2
             case _:
@@ -93,16 +101,15 @@ class ConfigManager:
     def update_screen_size(self, width, height):
         """Dynamically updates panel sizes based on the new screen size. Option panels still require a minimum size to function correctly."""
 
-        if width == self.WINDOW_WIDTH and height == self.WINDOW_HEIGHT:
+        if width == self.window_width and height == self.window_height:
             return
         
-        self.WINDOW_WIDTH = width
-        self.WINDOW_HEIGHT = height
-        self.ALGORITHM_PANEL_HEIGHT = self.WINDOW_HEIGHT
-        self.ENVIRONMENT_PANEL_WIDTH = self.WINDOW_WIDTH - self.ALGORITHM_PANEL_WIDTH
-        self.GRAPH_PANEL_WIDTH = self.ENVIRONMENT_PANEL_WIDTH
-        self.GRAPH_PANEL_HEIGHT = self.WINDOW_HEIGHT - self.ENVIRONMENT_PANEL_HEIGHT
-
+        self.window_width = width
+        self.window_height = height
+        self.algorithm_panel_height = self.window_height
+        self.environment_panel_width = self.window_width - self.algorithm_panel_width
+        self.graph_panel_width = self.environment_panel_width
+        self.graph_panel_height = self.window_height - self.environment_panel_height
 
     def set_backtracker(self):
         self.gen_algorithm = GenType.BACKTRACKER
