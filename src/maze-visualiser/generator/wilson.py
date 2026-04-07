@@ -24,6 +24,7 @@ class WilsonGenerator:
         self.visited.add(start_cell)
         self.grid[start_cell[0]][start_cell[1]] = NodeType.EMPTY
         
+        self.walk_nodes = []
         self.current_walk = []
         self.unvisited = set(self.nodes) - self.visited
         self.total_walks = 0
@@ -58,32 +59,42 @@ class WilsonGenerator:
         if not self.unvisited:
             return True
         
-        if not self.current_walk:
+        if not self.walk_nodes:
             start_cell = random.choice(list(self.unvisited))
+            self.walk_nodes = [start_cell]
             self.current_walk = [start_cell]
             self.grid[start_cell[0]][start_cell[1]] = NodeType.VISITED
             return False
         
-        current_cell = self.current_walk[-1]
+        current_cell = self.walk_nodes[-1]
         
         neighbors = self.get_neighbors(current_cell)
         next_cell = random.choice(neighbors)
 
-        if next_cell in self.current_walk:
+        if next_cell in self.walk_nodes:
             loop_index = self.current_walk.index(next_cell)
             
             for cell in self.current_walk[loop_index + 1:]:
                 self.grid[cell[0]][cell[1]] = NodeType.WALL
             
+            self.walk_nodes = self.walk_nodes[:self.walk_nodes.index(next_cell) + 1]
             self.current_walk = self.current_walk[:loop_index + 1]
             return False
         
-        self.current_walk.append(next_cell)    
+        self.walk_nodes.append(next_cell)
+
+        wall_row = (current_cell[0] + next_cell[0]) // 2
+        wall_col = (current_cell[1] + next_cell[1]) // 2
+        between_wall = (wall_row, wall_col)
+
+        self.current_walk.append(between_wall)  
+        self.current_walk.append(next_cell)
         self.grid[next_cell[0]][next_cell[1]] = NodeType.VISITED
+        self.grid[wall_row][wall_col] = NodeType.VISITED
 
         if next_cell in self.visited:
             self.add_walk()
-            self.current_walk = []
+            self.walk_nodes = []
         
         return False
 
@@ -94,20 +105,20 @@ class WilsonGenerator:
 
         self.total_walks += 1
 
-        for cell in self.current_walk:
+        for cell in self.walk_nodes:
                 self.visited.add(cell)
                 self.unvisited.discard(cell)
             
-        for i in range(len(self.current_walk) - 1):
-            current = self.current_walk[i]
-            next_cell = self.current_walk[i + 1]
+        for i in range(len(self.walk_nodes) - 1):
+            current = self.walk_nodes[i]
+            next_cell = self.walk_nodes[i + 1]
 
             wall_row = (current[0] + next_cell[0]) // 2
             wall_col = (current[1] + next_cell[1]) // 2
             self.grid[wall_row][wall_col] = NodeType.EMPTY
             self.grid[current[0]][current[1]] = NodeType.EMPTY
         
-        last_cell = self.current_walk[-1]
+        last_cell = self.walk_nodes[-1]
         self.grid[last_cell[0]][last_cell[1]] = NodeType.EMPTY
 
     def get_state_info(self):
