@@ -8,10 +8,9 @@ A Python project built with Pygame to visualise various maze generation and grap
 
 The project is designed to be an interactive learning tool, helping users understand how different algorithms behave by showing their execution step by step.
 
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-  <img src="examples/maze_large.gif" alt="Large Prim's Algorithm Demo" style="max-width: 45%; height: auto;">
-  <img src="examples/solve_large.gif" alt="Large Dead-End Filler Demo" style="max-width: 45%; height: auto;">
-</div>
+| Maze Generation | Maze Solving |
+|---------------------|-----------------|
+| ![Large Prim's Algorithm Demo](examples/maze_large.gif) | ![Large Dead-End Filler Demo](examples/solve_large.gif) |
 
 ## Maze Generation Algorithms
 ### Iterative Backtracker
