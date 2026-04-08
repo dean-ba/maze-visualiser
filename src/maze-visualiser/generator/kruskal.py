@@ -49,6 +49,7 @@ class KruskalGenerator:
         """
         Compares the set value of two nodes.
         If they are different then they are connected, and their sets are combined.
+        If they are the same, step() is ran again to ensure that exactly one wall is broken per step.
         """
         
         if self.nodes[node_1] != self.nodes[node_2]:
@@ -62,6 +63,8 @@ class KruskalGenerator:
                 for cell in self.nodes:
                     if self.nodes[cell] == old_set:
                         self.nodes.update({cell: join_set})
+        else:
+            self.step()
 
     def step(self):
         """
